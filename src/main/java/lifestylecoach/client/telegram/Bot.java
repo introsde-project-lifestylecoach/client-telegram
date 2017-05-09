@@ -1,6 +1,6 @@
 package lifestylecoach.client.telegram;
 
-import lifestylecoach.client.telegram.lifestylecoach.models.ProcessCentricMessage;
+import lifestylecoach.client.models.ProcessCentricMessage;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;

@@ -1,4 +1,4 @@
-package lifestylecoach.client.telegram.lifestylecoach.models;
+package lifestylecoach.client.models;
 
 /**
  * Created by matteo on 09/05/17.
