@@ -16,15 +16,30 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         // We check if the update has a message and the message has text
         if (update.hasMessage() && update.getMessage().hasText()) {
-            SendMessage message = new SendMessage() // Create a SendMessage object with mandatory fields
-                    .setChatId(update.getMessage().getChatId())
-                    .setText(update.getMessage().getText());
+
+            //take important stuffs from the user request
+            Long chatId = update.getMessage().getChatId(); // id of the chat
+            String reqMessage = update.getMessage().getText(); // message from the user
+
+            // Manage the request, and prepare the response
+            SendMessage message = prepareResponse(chatId, reqMessage);
+
             try {
                 sendMessage(message); // Call method to send the message
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private SendMessage prepareResponse(Long chatId, String command) {
+
+        // TODO manage the response
+
+        // prepare the response
+        SendMessage response = new SendMessage().setChatId(chatId).setText("TODOTODOTODO");
+
+        return response;
     }
 
     public String getBotUsername() {
