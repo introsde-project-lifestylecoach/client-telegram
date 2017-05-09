@@ -1,5 +1,6 @@
 package lifestylecoach.client.telegram;
 
+import lifestylecoach.client.telegram.lifestylecoach.models.ProcessCentricMessage;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -36,8 +37,12 @@ public class Bot extends TelegramLongPollingBot {
 
         // TODO manage the response
 
+        ProcessCentricMessage pcMessage = new ProcessCentricMessage();
+
+
+
         // prepare the response
-        SendMessage response = new SendMessage().setChatId(chatId).setText("TODOTODOTODO");
+        SendMessage response = new SendMessage().setChatId(chatId).setText("TODOTODOTODO " + chatId);
 
         return response;
     }
