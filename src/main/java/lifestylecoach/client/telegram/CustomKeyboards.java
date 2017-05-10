@@ -31,6 +31,20 @@ public class CustomKeyboards {
         return keyboardMarkup;
     }
 
+    public static ReplyKeyboardMarkup getNewRowKeyboard(String command1, String command2) {
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+
+        List<KeyboardRow> keyboard = new ArrayList();
+        KeyboardRow row = new KeyboardRow();
+        row.add(command1);
+        row.add(command2);
+        keyboard.add(row);
+
+        keyboardMarkup.setKeyboard(keyboard);
+
+        return keyboardMarkup;
+    }
+
 
     public static ForceReplyKeyboard getForceReply() {
         ForceReplyKeyboard keyboardMarkup = new ForceReplyKeyboard();
