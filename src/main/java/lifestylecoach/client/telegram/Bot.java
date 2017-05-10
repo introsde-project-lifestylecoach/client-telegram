@@ -1,5 +1,6 @@
 package lifestylecoach.client.telegram;
 
+import lifestylecoach.client.rest.ClientProcessCentric;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -12,6 +13,9 @@ public class Bot extends TelegramLongPollingBot {
 
     private static final String BOT_NAME = "lifestylecoach_introsde_bot";
     private static final String BOT_TOKEN = "260045306:AAFktJp6e6tubZTqMafPSu4icxi880gNynM";
+
+    // Services URI
+    private static final String URI_PROCESS_CENTRIC = "http://localhost:5700/lifestylecoach-process-centric";
 
     // COMMAND TAGS FOR THE TELEGRAM BOT
     private static final String TAG_MEASURES = "/measures"; // show tag measures
@@ -57,17 +61,22 @@ public class Bot extends TelegramLongPollingBot {
         SendMessage response;
 
         if (command.equals(TAG_MEASURES)) {
-            System.out.println(command); // TODO Send request to process-centric
+            System.out.println(command);
             response = new SendMessage().setChatId(chatId);
             response.setReplyMarkup(CustomKeyboards.getNewRowKeyboard(TAG_MEASURES_UPDATE, TAG_BACK));
-            response.setText("Here are your measures ..."); // TODO REQUEST TO PROCESS SENTRIC
+
+            // make http request to the process centric service
+            ClientProcessCentric clientProcessCentric = new ClientProcessCentric(URI_PROCESS_CENTRIC);
+            String res = clientProcessCentric.getMeasures();
+
+            response.setText(res);
         } else if (command.equals(TAG_MEASURES_UPDATE)) {
             System.out.println(command);
             response = new SendMessage().setChatId(chatId);
             response.setReplyMarkup(CustomKeyboards.getForceReply());
             response.setText(TAG_REPLY_MEASURES_UPDATE1);
         } else if (command.equals(TAG_GOALS)) {
-            System.out.println(command); // TODO Send request to process-centric
+            System.out.println(command);
             response = new SendMessage().setChatId(chatId);
             response.setReplyMarkup(CustomKeyboards.getNewRowKeyboard(TAG_GOALS_UPDATE, TAG_BACK));
             response.setText("Here are your goals ..."); // TODO REQUEST TO PROCESS SENTRIC
@@ -92,9 +101,17 @@ public class Bot extends TelegramLongPollingBot {
                 response = new SendMessage().setChatId(chatId);
                 response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
 
-                // TODO SAVE RESPONSE INTO THE DB
+                // TODO parse command
+                // TODO send request to process centric
+                //make post request to process centric in order to create new
+                // make http request to the process centric service
+                ClientProcessCentric clientProcessCentric = new ClientProcessCentric(URI_PROCESS_CENTRIC);
+                boolean res = clientProcessCentric.newMeasure("\"{ \\\"hello\\\" : \\\"TODO show measure\\\" }\"");
 
-                response.setText(TAG_REPLY_MEASURES_UPDATE3);
+                if (res == true)
+                    response.setText(TAG_REPLY_MEASURES_UPDATE3);
+                else
+                    response.setText("Error during the save of the new measure");
             } else if (replyMessage.equals(TAG_REPLY_GOALS_UPDATE1)) {
                 System.out.println(command); // TODO Send new keyboard
                 response = new SendMessage().setChatId(chatId);
