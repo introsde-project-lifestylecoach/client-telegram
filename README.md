@@ -11,5 +11,10 @@ Torna name, surname, last height, last weight
 
 2. insert new value 
 
-#### /goal
+#### /goal -> show goals (2)
+1. update goal
+2. select type
+3. maggiore o minore
+4. value
+
 #### /adaptor TODO
