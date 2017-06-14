@@ -2,6 +2,14 @@
 A telegram bot client for lifestyle coach
 
 ## Procedures
+
+### primo avvio
+1. C'è token?
+2. nome (preso da telegram)
+3. cognome
+4. primo peso
+5. prima altezza
+
 #### /seeprofile
 Torna name, surname, last height, last weight
 
