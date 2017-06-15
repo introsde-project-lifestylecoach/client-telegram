@@ -81,6 +81,11 @@ public class ClientProcessCentric extends RestClient {
         return getApi(USER_PROFILE + "/" + uid);
     }
 
+
+    public String getMeasures(Integer uid, String type) {
+        return getApi(SHOW_MEASURES + "/" + type);
+    }
+
     public boolean userExist(Integer uid) {
 
         // This call return a json like this {success : False}
@@ -143,4 +148,5 @@ public class ClientProcessCentric extends RestClient {
 
         return res;
     }
+
 }

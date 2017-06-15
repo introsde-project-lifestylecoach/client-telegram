@@ -99,6 +99,31 @@ public class BotBusiness implements Tags {
         if (res.equals(""))
             return this.genErrorMessage("seeProfile");
 
+        return this.genProfile(res);
+    }
+
+
+    public String showMeasures(User contact, String type) {
+
+        ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
+
+        String res = cp.getMeasures(contact.uid, type);
+
+        if (res.equals(""))
+            return this.genErrorMessage("seeProfile");
+
+        return this.genMeasuresList(res);
+    }
+
+    private String genMeasuresList(String res) {
+
+        // TODO
+        return res;
+
+    }
+
+    private String genProfile(String res) {
+
         // Format the output
         Gson gson = new Gson();
         HashMap<String, String> profile = new HashMap<String, String>();
@@ -109,12 +134,7 @@ public class BotBusiness implements Tags {
                 "\nHeight : " + profile.get("height") +
                 "\nActual weight : " + profile.get("weight");
 
-        return this.genProfile(strOut);
-    }
-
-    private String genProfile(String res) {
-        // TODO res arriva in json trasformala in text
-        return new String(res);
+        return strOut;
     }
 
     private String genRegFinish(User contact) {
@@ -149,6 +169,10 @@ public class BotBusiness implements Tags {
 
     private String genOnStartResponse(User contact) {
         return new String("Hi again " + contact.name + "!");
+    }
+
+    public String addMeasure(User contact) {
+        return "OK"; //TODO
     }
 
 }

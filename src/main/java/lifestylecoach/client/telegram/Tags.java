@@ -22,6 +22,12 @@ public interface Tags {
     String TAG_REGWEIGHT = "/regweight";
     String TAG_SEEPROFILE = "/seeprofile";
     String TAG_MEASURES = "/measures";
+    String LBL_SHOWMEASURES_WEIGHT = "weight";
+    String TAG_SHOWMEASURES_WEIGHT = "/showwheights";
+    String LBL_SHOWMEASURES_STEP = "step";
+    String TAG_SHOWMEASURES_STEP = "/showsteps";
+    String TAG_ADDMEASURE = "/update";
+
     String TAG_MEASURETYPE = "/measuretype";
     String TAG_UPDATEMEASURE = "/updatemeasure";
     String TAG_GOALS = "/goals";

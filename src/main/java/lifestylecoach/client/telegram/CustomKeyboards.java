@@ -3,6 +3,7 @@ package lifestylecoach.client.telegram;
 import org.telegram.telegrambots.api.objects.replykeyboard.ForceReplyKeyboard;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.util.ArrayList;
@@ -55,19 +56,25 @@ public class CustomKeyboards {
 
 
     // DEFAULT keyboard
-    public static InlineKeyboardMarkup getInlineKeyboard() {
+    public static InlineKeyboardMarkup getInlineKeyboard(String lbl1, String msg1, String lbl2, String msg2) {
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
 
-       /* List<KeyboardRow> keyboard = new ArrayList();
-        KeyboardRow row = new KeyboardRow();
-        row.add("/measures");
-        row.add("/goals");
-        keyboard.add(row);
-        row = new KeyboardRow();
-        row.add("/activities");
+        ArrayList keyboard = new ArrayList();
+        ArrayList row = new ArrayList();
+
+        InlineKeyboardButton btn1 = new InlineKeyboardButton();
+        btn1.setText(lbl1);
+        btn1.setCallbackData(msg1);
+        InlineKeyboardButton btn2 = new InlineKeyboardButton();
+        btn2.setText(lbl2);
+        btn2.setCallbackData(msg2);
+
+        row.add(btn1);
+        row.add(btn2);
+
         keyboard.add(row);
 
-        keyboardMarkup.setKeyboard(keyboard);*/
+        keyboardMarkup.setKeyboard(keyboard);
 
         return keyboardMarkup;
     }

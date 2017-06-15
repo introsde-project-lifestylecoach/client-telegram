@@ -2,6 +2,7 @@ package lifestylecoach.client.telegram;
 
 import lifestylecoach.client.models.User;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -19,31 +20,43 @@ public class Bot extends TelegramLongPollingBot implements Tags {
 
 
     public void onUpdateReceived(Update update) {
+
         // We check if the update has a message and the message has text
-        if (update.hasMessage() && update.getMessage().hasText()) {
+        if ((update.hasMessage() && update.getMessage().hasText()) || update.hasCallbackQuery()) {
 
             //take important stuffs from the user request
-            Long chatId = update.getMessage().getChatId(); // id of the chat
-            String reqMessage = update.getMessage().getText(); // message from the user
+
+            Message message;
+            String reqMessage;
+            if (update.hasMessage()) {
+                message = update.getMessage();
+                reqMessage = message.getText(); // message from the user
+            } else {
+                message = update.getCallbackQuery().getMessage();
+                reqMessage = update.getCallbackQuery().getData();
+            }
+
+
+            Long chatId = message.getChatId(); // id of the chat
 
             // gen my profile
-            User contact = new User(update.getMessage().getFrom().getId(),
-                    update.getMessage().getFrom().getFirstName(),
-                    update.getMessage().getFrom().getLastName());
+            User contact = new User(message.getFrom().getId(),
+                    message.getFrom().getFirstName(),
+                    message.getFrom().getLastName());
 
             String replyMessage = null;
 
-            if (update.getMessage().isReply()) {
+            if (message.isReply()) {
                 // Selection of the reply
-                replyMessage = update.getMessage().getReplyToMessage().getText();
+                replyMessage = message.getReplyToMessage().getText();
             }
 
             // Manage the request, and prepare the response
-            SendMessage message = prepareResponse(chatId, contact, reqMessage, replyMessage);
+            SendMessage response = prepareResponse(chatId, contact, reqMessage, replyMessage);
 
             try {
-                if (message != null)
-                    sendMessage(message); // Call method to send the message
+                if (response != null)
+                    sendMessage(response); // Call method to send the message
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
@@ -57,6 +70,7 @@ public class Bot extends TelegramLongPollingBot implements Tags {
 
         // log and instantiate response
         System.out.println(command);
+
         response = new SendMessage().setChatId(chatId);
         String res = "";
 
@@ -102,15 +116,38 @@ public class Bot extends TelegramLongPollingBot implements Tags {
             res = botBusiness.seeProfile(contact);
 
             // if the user is not registered
-            if (!res.equals(botBusiness.genNotRegisteredResponse(contact)))
+            if (res.equals(botBusiness.genNotRegisteredResponse(contact)))
                 response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
 
             response.setText(res);
+        } else if (command.equals(TAG_MEASURES)) {
+            res = botBusiness.addMeasure(contact);
+
+            // if the user is not registered
+            if (res.equals(botBusiness.genNotRegisteredResponse(contact)))
+                response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+            else
+                response.setReplyMarkup(CustomKeyboards.getInlineKeyboard(LBL_SHOWMEASURES_WEIGHT,
+                        TAG_SHOWMEASURES_WEIGHT,
+                        LBL_SHOWMEASURES_STEP,
+                        TAG_SHOWMEASURES_STEP));
+
+            response.setText(res);
+        } else if (command.equals(TAG_SHOWMEASURES_WEIGHT)) {
+            res = botBusiness.showMeasures(contact, "weight");
+
+            response.setReplyMarkup(CustomKeyboards.getNewRowKeyboard(TAG_ADDMEASURE, TAG_BACK));
+
+            response.setText(res);
+        } else if (command.equals(TAG_SHOWMEASURES_STEP)) {
+            res = botBusiness.showMeasures(contact, "step");
+
+            System.out.println("ASDASDASOIFPOAIGAPOIGPOIA");
+
+            response.setReplyMarkup(CustomKeyboards.getNewRowKeyboard(TAG_ADDMEASURE, TAG_BACK));
+
+            response.setText(res);
         }
-        //else if(command.equals(TAG_MEASURES)) {
-
-
-        //}
         else {// TODO measures , goals , adaptor
             response = null; //TODO
         }
