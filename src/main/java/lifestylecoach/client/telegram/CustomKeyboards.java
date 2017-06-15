@@ -19,11 +19,12 @@ public class CustomKeyboards {
 
         List<KeyboardRow> keyboard = new ArrayList();
         KeyboardRow row = new KeyboardRow();
+        row.add("/seeprofile");
         row.add("/measures");
-        row.add("/goals");
         keyboard.add(row);
         row = new KeyboardRow();
-        row.add("/activities");
+        row.add("/goals");
+        row.add("/adaptor"); // TODO TMP
         keyboard.add(row);
 
         keyboardMarkup.setKeyboard(keyboard);
@@ -70,6 +71,4 @@ public class CustomKeyboards {
 
         return keyboardMarkup;
     }
-
-
 }
