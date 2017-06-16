@@ -9,7 +9,7 @@ public interface Tags {
     String TAG_REPLY_MEASURES_UPDATE2 = "2. Now insert the value for the type";
     String TAG_REPLY_MEASURES_UPDATE3 = "3. Measure saved";
     //private static final String TAG_GOALS = "/goals";
-    String TAG_GOALS_UPDATE = "/newgoal";
+    String TAG_GOALS_UPDATE = "/modify";
     String TAG_REPLY_GOALS_UPDATE1 = "1. Insert goal title";
     String TAG_REPLY_GOALS_UPDATE2 = "2. Now insert the description for the goal ";
     String TAG_REPLY_GOALS_UPDATE3 = "3. Goal saved";
@@ -26,6 +26,7 @@ public interface Tags {
     String TAG_SHOWMEASURES_WEIGHT = "/showwheights";
     String LBL_SHOWMEASURES_STEP = "step";
     String TAG_SHOWMEASURES_STEP = "/showsteps";
+    String TAG_SHOWGOALS = "/goals";
     String TAG_ADDMEASURE = "/update";
 
     String TAG_MEASURETYPE = "/measuretype";

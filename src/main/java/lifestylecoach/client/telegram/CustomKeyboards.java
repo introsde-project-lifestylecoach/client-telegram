@@ -2,6 +2,7 @@ package lifestylecoach.client.telegram;
 
 import org.telegram.telegrambots.api.objects.replykeyboard.ForceReplyKeyboard;
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
@@ -48,6 +49,22 @@ public class CustomKeyboards {
         return keyboardMarkup;
     }
 
+    public static ReplyKeyboardMarkup getNewColumnKeyboard(String[] commands) {
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+
+        List<KeyboardRow> keyboard = new ArrayList();
+
+        for (int i = 0; i < commands.length; i++) {
+            KeyboardRow row = new KeyboardRow();
+            row.add(commands[i]);
+            keyboard.add(row);
+        }
+
+        keyboardMarkup.setKeyboard(keyboard);
+
+        return keyboardMarkup;
+    }
+
     public static ForceReplyKeyboard getForceReply() {
         ForceReplyKeyboard keyboardMarkup = new ForceReplyKeyboard();
         keyboardMarkup.setSelective(true);
@@ -73,6 +90,28 @@ public class CustomKeyboards {
         row.add(btn2);
 
         keyboard.add(row);
+
+        keyboardMarkup.setKeyboard(keyboard);
+
+        return keyboardMarkup;
+    }
+
+    public static ReplyKeyboard getInlineVerticalKeyboard(String[] goals) {
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+
+        ArrayList keyboard = new ArrayList();
+        ArrayList row = new ArrayList();
+
+        for (int i = 0; i < goals.length; i++) {
+            InlineKeyboardButton btn = new InlineKeyboardButton();
+            btn.setText(goals[i]);
+            btn.setCallbackData(goals[i]);
+
+            row = new ArrayList();
+            row.add(btn);
+
+            keyboard.add(row);
+        }
 
         keyboardMarkup.setKeyboard(keyboard);
 

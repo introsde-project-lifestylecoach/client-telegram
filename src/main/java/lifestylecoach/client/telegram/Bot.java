@@ -1,5 +1,7 @@
 package lifestylecoach.client.telegram;
 
+import com.google.gson.Gson;
+import lifestylecoach.client.models.Goal;
 import lifestylecoach.client.models.User;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
@@ -158,6 +160,33 @@ public class Bot extends TelegramLongPollingBot implements Tags {
             response.setReplyMarkup(CustomKeyboards.getForceReply());
 
             response.setText(res);
+        } else if (command.equals(TAG_SHOWGOALS)) {
+            res = botBusiness.getGoals(contact);
+
+            System.out.println(res);
+
+            Gson gson = new Gson();
+            Goal vGoals[];
+            vGoals = gson.fromJson(res, Goal[].class);
+
+            //vGoals.add(new Goal("title1", "description1", false));
+            //vGoals.add(new Goal("title2", "description2", false));
+            //System.out.println(gson.toJson(vGoals,  vGoals.getClass()));
+
+            String[] goals = new String[vGoals.length + 1];
+            res = "Goals : \n\n";
+            int i;
+            for (i = 0; i < vGoals.length; i++) {
+                goals[i] = TAG_GOALS_UPDATE + " " + vGoals[i].title;
+                res += vGoals[i].formattedText() + "\n";
+            }
+            goals[i] = TAG_BACK;
+
+            //response.setReplyMarkup(CustomKeyboards.getInlineVerticalKeyboard(goals));
+            response.setReplyMarkup(CustomKeyboards.getNewColumnKeyboard(goals));
+
+            response.setText(res);
+
         } else if (command.equals(TAG_BACK)) {
 
             res = botBusiness.back(contact);
@@ -169,6 +198,27 @@ public class Bot extends TelegramLongPollingBot implements Tags {
             response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
 
             response.setText(res);
+        } else if (command.split(" ")[0].equals(TAG_GOALS_UPDATE)) {
+
+            try {
+                res = TAG_GOALS_UPDATE + " " + command.split(" ")[1];
+
+                String[] rows = command.split("\n");
+
+
+                //if(rows.length == 1)
+                res += "\nNew Title : ";
+                //else if(rows.length == 3)
+                //   res += "\nNew Description :";
+                //else if(rows.length == 5)
+                //   res += "Condition (insert < or >)";
+
+                response.setReplyMarkup(CustomKeyboards.getForceReply());
+            } catch (Exception e) {
+
+            }
+            response.setText(res);
+
         }
         // REPLIES
         else if (replyMessage != null) {
@@ -184,116 +234,42 @@ public class Bot extends TelegramLongPollingBot implements Tags {
                 response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
                 // TODO AGGIUNGERE CONTROLLI
                 response.setText(res);
+            } else if (replyMessage.split(" ")[0].equals(TAG_GOALS_UPDATE)) {
+
+                res = replyMessage + command;
+
+                String[] rows = res.split("\n");
+
+                // if(rows.length == 1)
+                //   res += "\nNew Title :";
+                //else
+                if (rows.length == 2)
+                    res += "\nNew Description :";
+                else if (rows.length == 3)
+                    res += "\nType of measure:";
+                else if (rows.length == 4)
+                    res += "\nCondition (insert < or >):";
+                else if (rows.length == 5)
+                    res += "\nQuantity:";
+
+                response.setReplyMarkup(CustomKeyboards.getForceReply());
+
+                if (rows.length == 6) {
+                    res = botBusiness.updateGoal(contact, rows);
+                    response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+                }
+
+                response.setText(res);
             }
         } else {// TODO measures , goals , adaptor
             response = null; //TODO
+
+            //response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+
         }
 
         return response;
     }
-
-    // TODO REMOVE THIS METHOD
-    /*
-    private SendMessage prepareResponse_deprecated(Long chatId, String command, String replyMessage) {
-
-        // TODO manage the response
-        SendMessage response;
-
-        if (command.equals(TAG_MEASURES)) {
-            System.out.println(command);
-            response = new SendMessage().setChatId(chatId);
-            response.setReplyMarkup(CustomKeyboards.getNewRowKeyboard(TAG_MEASURES_UPDATE, TAG_BACK));
-
-            // make http request to the process centric service
-            ClientProcessCentric clientProcessCentric = new ClientProcessCentric(URI_PROCESS_CENTRIC);
-            String res = clientProcessCentric.getMeasures();
-
-            response.setText(res);
-        } else if (command.equals(TAG_MEASURES_UPDATE)) {
-            System.out.println(command);
-            response = new SendMessage().setChatId(chatId);
-            response.setReplyMarkup(CustomKeyboards.getForceReply());
-            response.setText(TAG_REPLY_MEASURES_UPDATE1);
-        } else if (command.equals(TAG_GOALS)) {
-            System.out.println(command);
-            response = new SendMessage().setChatId(chatId);
-            response.setReplyMarkup(CustomKeyboards.getNewRowKeyboard(TAG_GOALS_UPDATE, TAG_BACK));
-            response.setText("Here are your goals ..."); // TODO REQUEST TO PROCESS SENTRIC
-        } else if (command.equals(TAG_GOALS_UPDATE)) {
-            System.out.println(command);
-            response = new SendMessage().setChatId(chatId);
-            response.setReplyMarkup(CustomKeyboards.getForceReply());
-            response.setText(TAG_REPLY_GOALS_UPDATE1);
-        }
-        // REPLIES
-        else if (replyMessage != null) {
-            String[] vReplies = replyMessage.split(" : ");
-
-            if (replyMessage.equals(TAG_REPLY_MEASURES_UPDATE1)) {
-                System.out.println(command);
-                response = new SendMessage().setChatId(chatId);
-                response.setReplyMarkup(CustomKeyboards.getForceReply());
-
-                response.setText(TAG_REPLY_MEASURES_UPDATE2 + " : " + command);
-            } else if (vReplies[0].equals(TAG_REPLY_MEASURES_UPDATE2)) {
-                System.out.println(command);
-                response = new SendMessage().setChatId(chatId);
-                response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
-
-                // TODO marshal parse command
-                System.out.println("");
-                System.out.println(vReplies[1]);
-                System.out.println(command);
-
-
-                // TODO send request to process centric
-                //make post request to process centric in order to create new
-                // make http request to the process centric service
-                ClientProcessCentric clientProcessCentric = new ClientProcessCentric(URI_PROCESS_CENTRIC);
-                boolean res = clientProcessCentric.newMeasure("\"{ \\\"hello\\\" : \\\"TODO show measure\\\" }\"");
-
-                if (res == true)
-                    response.setText(TAG_REPLY_MEASURES_UPDATE3);
-                else
-                    response.setText("Error during the save of the new measure");
-            } else if (replyMessage.equals(TAG_REPLY_GOALS_UPDATE1)) {
-                System.out.println(command); // TODO Send new keyboard
-                response = new SendMessage().setChatId(chatId);
-                response.setReplyMarkup(CustomKeyboards.getForceReply());
-
-                response.setText(TAG_REPLY_GOALS_UPDATE2 + " : " + command);
-
-            } else if (vReplies[0].equals(TAG_REPLY_GOALS_UPDATE2)) {
-                System.out.println(command);
-                response = new SendMessage().setChatId(chatId);
-                response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
-
-                // TODO SAVE RESPONSE INTO THE DB
-
-                response.setText(TAG_REPLY_GOALS_UPDATE3);
-            } else // default response
-            {
-                System.out.println(command);
-                response = new SendMessage().setChatId(chatId);
-                response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
-                response.setText("What? I go back to the main menu ...");
-            }
-        } else if (command.equals(TAG_BACK)) {
-            System.out.println(command);
-            response = new SendMessage().setChatId(chatId);
-            response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
-            response.setText("Back to main menu ...");
-        } else // default response
-        {
-            System.out.println(command);
-            response = new SendMessage().setChatId(chatId);
-            response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
-            response.setText("What? I go back to the main menu ...");
-        }
-
-        return response;
-    }
-    */
 
     public String getBotUsername() {
         return BOT_NAME;

@@ -1,6 +1,7 @@
 package lifestylecoach.client.telegram;
 
 import com.google.gson.Gson;
+import lifestylecoach.client.models.Goal;
 import lifestylecoach.client.models.Measure;
 import lifestylecoach.client.models.User;
 import lifestylecoach.client.rest.ClientProcessCentric;
@@ -41,7 +42,6 @@ public class BotBusiness implements Tags {
         return new String("Back to main menù");
     }
 
-
     // Save the name and the surname of the user into the db
     public String registrationSurname(User contact, String command) {
 
@@ -60,7 +60,6 @@ public class BotBusiness implements Tags {
 
         return this.genRegHeight(contact);
     }
-
 
     public String registrationHeight(User contact, String command) {
 
@@ -114,10 +113,13 @@ public class BotBusiness implements Tags {
         return this.genProfile(res);
     }
 
-
     public String showMeasures(User contact, String type) {
 
         ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
+
+        // is the userid already registered?
+        if (!cp.userExist(contact.uid))
+            return genNotRegisteredResponse(contact);
 
         String res = cp.getMeasures(contact.uid, type);
 
@@ -127,10 +129,13 @@ public class BotBusiness implements Tags {
         return this.genMeasuresList(res);
     }
 
-
     public String updateMeasure(User contact, String parameter, String type) {
 
         ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
+
+        // is the userid already registered?
+        if (!cp.userExist(contact.uid))
+            return genNotRegisteredResponse(contact);
 
         // generating JSON
         Gson gson = new Gson();
@@ -141,6 +146,67 @@ public class BotBusiness implements Tags {
             return this.genErrorMessage("updateMeasure");
 
         return this.genUpdateMeasureSucess(type);
+    }
+
+    public boolean updateGoalCheck_newTitle(String title) {
+        return true; // TODO
+    }
+
+    public boolean updateGoalCheck_newDescription(String title) {
+        return true; // TODO
+    }
+
+    public boolean updateGoalCheck_newCondition(String title) {
+        return true; // TODO
+    }
+
+    public String updateGoal(User contact, String[] rows) {
+
+        // old title
+        // new title
+        // description
+        // higher or lower
+        // Quantity
+
+        ClientProcessCentric cp = new ClientProcessCentric(serviceUri);
+
+        // is the userid already registered?
+        if (!cp.userExist(contact.uid))
+            return genNotRegisteredResponse(contact);
+
+        String oldTitle = "";
+        Goal goal = new Goal();
+
+        oldTitle = rows[0].split(" ")[1];
+
+        goal.title = rows[1].split(":")[1];
+        goal.description = rows[2].split(":")[1];
+        goal.status = false;
+        goal.condition = rows[3].split(":")[1] + " " + rows[4].split(":")[1] + " " + rows[5].split(":")[1];
+
+        Gson gson = new Gson();
+        String goalJson = gson.toJson(goal, Goal.class);
+
+        cp.updateGoal(contact.uid, oldTitle, goalJson);
+
+        return genUpdateGoalSuccess(oldTitle);
+
+    }
+
+    private String genUpdateGoalSuccess(String oldTitle) {
+        return new String("Goal " + oldTitle + " updated");
+    }
+
+    public String getGoals(User contact) {
+        ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
+
+        String res = cp.getGoals(contact.uid);
+
+        if (res.equals(""))
+            return this.genErrorMessage("getGoals");
+
+        return res;
+
     }
 
     private String genUpdateMeasureSucess(String type) {
@@ -211,5 +277,4 @@ public class BotBusiness implements Tags {
         return new String("Insert new " + type + " value:");
 
     }
-
 }

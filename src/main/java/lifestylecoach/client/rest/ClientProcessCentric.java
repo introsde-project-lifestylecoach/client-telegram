@@ -17,6 +17,8 @@ public class ClientProcessCentric extends RestClient {
     public static final String NEW_HEIGHT = "/measure/new";
     public static final String NEW_WEIGHT = "/measure/new";
     public static final String SHOW_MEASURES = "/measure/show";
+    public static final String SHOW_GOALS = "/goal/show";
+    public static final String UPDATE_GOAL = "/goal/new";
 
     public ClientProcessCentric(String serviceURI) {
         super(serviceURI);
@@ -71,6 +73,11 @@ public class ClientProcessCentric extends RestClient {
         return newApi(NEW_HEIGHT, measure);
     }
 
+
+    public String getGoals(Integer uid) {
+        return getApi(SHOW_GOALS + "/" + uid);
+    }
+
     public boolean newWeight(String measure) {
         // TODO fare json di weight
         return newApi(NEW_WEIGHT, measure);
@@ -104,6 +111,8 @@ public class ClientProcessCentric extends RestClient {
         Response response;
         int status;
         boolean res = false;
+
+        // TODO CECK OF THE RESPONSE
 
         try {
             response = service.path(address)
@@ -148,4 +157,7 @@ public class ClientProcessCentric extends RestClient {
         return res;
     }
 
+    public Boolean updateGoal(Integer uid, String oldTitle, String goalJson) {
+        return newApi(UPDATE_GOAL + "/" + uid + "/" + oldTitle, goalJson);
+    }
 }
