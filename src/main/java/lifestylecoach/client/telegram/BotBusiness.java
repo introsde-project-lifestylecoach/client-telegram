@@ -30,6 +30,18 @@ public class BotBusiness implements Tags {
         return this.genOnStartResponse(contact);
     }
 
+    public String back(User contact) {
+
+        ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
+
+        // is the userid already registered?
+        if (!cp.userExist(contact.uid))
+            return genNotRegisteredResponse(contact);
+
+        return new String("Back to main menù");
+    }
+
+
     // Save the name and the surname of the user into the db
     public String registrationSurname(User contact, String command) {
 
@@ -115,6 +127,26 @@ public class BotBusiness implements Tags {
         return this.genMeasuresList(res);
     }
 
+
+    public String updateMeasure(User contact, String parameter, String type) {
+
+        ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
+
+        // generating JSON
+        Gson gson = new Gson();
+        String measure = gson.toJson(new Measure(contact.uid, type, parameter));
+
+        // is all good? if not report the error
+        if (!cp.newMeasure(measure))
+            return this.genErrorMessage("updateMeasure");
+
+        return this.genUpdateMeasureSucess(type);
+    }
+
+    private String genUpdateMeasureSucess(String type) {
+        return new String("Measure of " + type + " updated");
+    }
+
     private String genMeasuresList(String res) {
 
         // TODO
@@ -172,7 +204,12 @@ public class BotBusiness implements Tags {
     }
 
     public String addMeasure(User contact) {
-        return "OK"; //TODO
+        return new String("Measure types :"); //TODO
+    }
+
+    public String genUpdateMeasure(String type) {
+        return new String("Insert new " + type + " value:");
+
     }
 
 }

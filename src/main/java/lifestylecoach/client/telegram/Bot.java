@@ -136,19 +136,56 @@ public class Bot extends TelegramLongPollingBot implements Tags {
         } else if (command.equals(TAG_SHOWMEASURES_WEIGHT)) {
             res = botBusiness.showMeasures(contact, "weight");
 
-            response.setReplyMarkup(CustomKeyboards.getNewRowKeyboard(TAG_ADDMEASURE, TAG_BACK));
+            response.setReplyMarkup(CustomKeyboards.getNewRowKeyboard(TAG_UPDATEWEIGHT, TAG_BACK));
 
             response.setText(res);
         } else if (command.equals(TAG_SHOWMEASURES_STEP)) {
             res = botBusiness.showMeasures(contact, "step");
 
-            System.out.println("ASDASDASOIFPOAIGAPOIGPOIA");
+            response.setReplyMarkup(CustomKeyboards.getNewRowKeyboard(TAG_UPDATESTEPS, TAG_BACK));
 
-            response.setReplyMarkup(CustomKeyboards.getNewRowKeyboard(TAG_ADDMEASURE, TAG_BACK));
+            response.setText(res);
+        } else if (command.equals(TAG_UPDATEWEIGHT)) {
+            //res = botBusiness.updateMeasure(contact, "weight");
+            res = botBusiness.genUpdateMeasure("weight");
+
+            response.setReplyMarkup(CustomKeyboards.getForceReply());
+
+            response.setText(res);
+        } else if (command.equals(TAG_UPDATESTEPS)) {
+            res = botBusiness.genUpdateMeasure("step");
+
+            response.setReplyMarkup(CustomKeyboards.getForceReply());
+
+            response.setText(res);
+        } else if (command.equals(TAG_BACK)) {
+
+            res = botBusiness.back(contact);
+
+            // if the user is not registered
+            if (!res.equals(botBusiness.genNotRegisteredResponse(contact)))
+                response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+
+            response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
 
             response.setText(res);
         }
-        else {// TODO measures , goals , adaptor
+        // REPLIES
+        else if (replyMessage != null) {
+            //String[] vReplies = replyMessage.split(" : ");
+
+            if (replyMessage.equals(botBusiness.genUpdateMeasure("weight"))) {
+                res = botBusiness.updateMeasure(contact, command, "weight");
+                response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+                // TODO AGGIUNGERE CONTROLLI
+                response.setText(res);
+            } else if (replyMessage.equals(botBusiness.genUpdateMeasure("step"))) {
+                res = botBusiness.updateMeasure(contact, command, "step");
+                response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+                // TODO AGGIUNGERE CONTROLLI
+                response.setText(res);
+            }
+        } else {// TODO measures , goals , adaptor
             response = null; //TODO
         }
 

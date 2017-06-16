@@ -29,10 +29,11 @@ public interface Tags {
     String TAG_ADDMEASURE = "/update";
 
     String TAG_MEASURETYPE = "/measuretype";
-    String TAG_UPDATEMEASURE = "/updatemeasure";
+    String TAG_UPDATEMEASURE = "/update";
+    String TAG_UPDATEWEIGHT = "/update weight";
+    String TAG_UPDATESTEPS = "/update steps";
+
     String TAG_GOALS = "/goals";
     String TAG_GOALSUPDATE = "/goalsupdate";
     String TAG_GOALTYPE = "/goaltype";
-
-
 }

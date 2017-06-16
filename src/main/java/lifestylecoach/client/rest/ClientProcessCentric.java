@@ -16,7 +16,7 @@ public class ClientProcessCentric extends RestClient {
     public static final String NEW_MEASURE = "/measure/new";
     public static final String NEW_HEIGHT = "/measure/new";
     public static final String NEW_WEIGHT = "/measure/new";
-    public static final String SHOW_MEASURES = "/measure";
+    public static final String SHOW_MEASURES = "/measure/show";
 
     public ClientProcessCentric(String serviceURI) {
         super(serviceURI);
@@ -44,9 +44,8 @@ public class ClientProcessCentric extends RestClient {
         return res;
     }*/
 
-    public boolean newMeasure(String req) {
-        // TODO fare json di req
-        return newApi(NEW_MEASURE, req);
+    public boolean newMeasure(String measure) {
+        return newApi(NEW_MEASURE, measure);
     }
 
     public boolean newNameSurname(String user) {

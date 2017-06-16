@@ -38,6 +38,7 @@ public class CustomKeyboards {
 
         List<KeyboardRow> keyboard = new ArrayList();
         KeyboardRow row = new KeyboardRow();
+
         row.add(command1);
         row.add(command2);
         keyboard.add(row);
@@ -46,7 +47,6 @@ public class CustomKeyboards {
 
         return keyboardMarkup;
     }
-
 
     public static ForceReplyKeyboard getForceReply() {
         ForceReplyKeyboard keyboardMarkup = new ForceReplyKeyboard();
