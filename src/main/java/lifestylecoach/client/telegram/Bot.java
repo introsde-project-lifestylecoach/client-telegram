@@ -243,19 +243,43 @@ public class Bot extends TelegramLongPollingBot implements Tags {
                 // if(rows.length == 1)
                 //   res += "\nNew Title :";
                 //else
-                if (rows.length == 2)
-                    res += "\nNew Description :";
-                else if (rows.length == 3)
-                    res += "\nType of measure:";
-                else if (rows.length == 4)
-                    res += "\nCondition (insert < or >):";
-                else if (rows.length == 5)
-                    res += "\nQuantity:";
+
 
                 response.setReplyMarkup(CustomKeyboards.getForceReply());
 
+                if (rows.length == 2) {
+                    if (!botBusiness.updateGoalCheck_newTitle(command)) {
+                        res = botBusiness.genErrorMessage(TAG_GOALS_UPDATE);
+                        response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+                    } else
+                        res += "\nNew Description :";
+                } else if (rows.length == 3) {
+                    if (!botBusiness.updateGoalCheck_newDescription(command)) {
+                        res = botBusiness.genErrorMessage(TAG_GOALS_UPDATE);
+                        response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+                    } else
+                        res += "\nType of measure:";
+                } else if (rows.length == 4) {
+                    if (!botBusiness.updateGoalCheck_type(command)) {
+                        res = botBusiness.genErrorMessage(TAG_GOALS_UPDATE);
+                        response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+                    } else
+                        res += "\nCondition (insert < or >):";
+                } else if (rows.length == 5) {
+                    if (!botBusiness.updateGoalCheck_newCondition(command)) {
+                        res = botBusiness.genErrorMessage(TAG_GOALS_UPDATE);
+                        response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+                    } else
+                        res += "\nQuantity:";
+                }
+
                 if (rows.length == 6) {
-                    res = botBusiness.updateGoal(contact, rows);
+                    if (!botBusiness.updateGoalCheck_number(command)) {
+                        res = botBusiness.genErrorMessage(TAG_GOALS_UPDATE);
+                        response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+                    } else
+                        res = botBusiness.updateGoal(contact, rows);
+
                     response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
                 }
 

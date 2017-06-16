@@ -149,15 +149,31 @@ public class BotBusiness implements Tags {
     }
 
     public boolean updateGoalCheck_newTitle(String title) {
-        return true; // TODO
+        return !title.contains("\n");
     }
 
-    public boolean updateGoalCheck_newDescription(String title) {
-        return true; // TODO
+    public boolean updateGoalCheck_newDescription(String description) {
+        return !description.contains("\n");
     }
 
-    public boolean updateGoalCheck_newCondition(String title) {
-        return true; // TODO
+    public boolean updateGoalCheck_newCondition(String condition) {
+        System.out.println("?????????????????????");
+        System.out.println(condition);
+
+        return condition.equals("<") || condition.equals("<=") || condition.equals(">") || condition.equals(">=");
+    }
+
+    public boolean updateGoalCheck_type(String type) {
+
+        return type.toLowerCase().equals("weight") || type.toLowerCase().equals("step");
+    }
+
+    public boolean updateGoalCheck_number(String number) {
+        try {
+            return !Double.valueOf(number).isNaN();
+        } catch (java.lang.NumberFormatException e) {
+            return false;
+        }
     }
 
     public String updateGoal(User contact, String[] rows) {
