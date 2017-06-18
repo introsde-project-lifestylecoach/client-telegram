@@ -117,4 +117,11 @@ public class CustomKeyboards {
 
         return keyboardMarkup;
     }
+
+    public static void getRowForceKeyboard(String command1, String command2) {
+
+        // TODO: 16/06/17  
+
+
+    }
 }

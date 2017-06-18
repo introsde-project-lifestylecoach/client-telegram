@@ -74,7 +74,7 @@ public class ClientProcessCentric extends RestClient {
     }
 
 
-    public String getGoals(Integer uid) {
+    public String getGoals(Long uid) {
         return getApi(SHOW_GOALS + "/" + uid);
     }
 
@@ -83,16 +83,16 @@ public class ClientProcessCentric extends RestClient {
         return newApi(NEW_WEIGHT, measure);
     }
 
-    public String seeProfile(Integer uid) {
+    public String seeProfile(Long uid) {
         return getApi(USER_PROFILE + "/" + uid);
     }
 
 
-    public String getMeasures(Integer uid, String type) {
-        return getApi(SHOW_MEASURES + "/" + type);
+    public String getMeasures(Long uid, String type) {
+        return getApi(SHOW_MEASURES + "/" + uid + "/" + type);
     }
 
-    public boolean userExist(Integer uid) {
+    public boolean userExist(Long uid) {
 
         // This call return a json like this {success : False}
         String getRes = getApi(USER_EXIST + "/" + uid);
@@ -157,7 +157,7 @@ public class ClientProcessCentric extends RestClient {
         return res;
     }
 
-    public Boolean updateGoal(Integer uid, String oldTitle, String goalJson) {
+    public Boolean updateGoal(Long uid, String oldTitle, String goalJson) {
         return newApi(UPDATE_GOAL + "/" + uid + "/" + oldTitle, goalJson);
     }
 }

@@ -38,13 +38,17 @@ public class Bot extends TelegramLongPollingBot implements Tags {
                 reqMessage = update.getCallbackQuery().getData();
             }
 
-
             Long chatId = message.getChatId(); // id of the chat
 
             // gen my profile
-            User contact = new User(message.getFrom().getId(),
+            User contact = new User(chatId,
                     message.getFrom().getFirstName(),
                     message.getFrom().getLastName());
+
+
+            System.out.println("\n========================================");
+            System.out.println(contact.uid);
+            System.out.println("========================================");
 
             String replyMessage = null;
 
@@ -257,8 +261,10 @@ public class Bot extends TelegramLongPollingBot implements Tags {
                     if (!botBusiness.updateGoalCheck_newDescription(command)) {
                         res = botBusiness.genErrorMessage(TAG_GOALS_UPDATE);
                         response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
-                    } else
+                    } else {
                         res += "\nType of measure:";
+                        CustomKeyboards.getRowForceKeyboard("<", ">");
+                    }
                 } else if (rows.length == 4) {
                     if (!botBusiness.updateGoalCheck_type(command)) {
                         res = botBusiness.genErrorMessage(TAG_GOALS_UPDATE);

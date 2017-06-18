@@ -70,7 +70,7 @@ public class BotBusiness implements Tags {
 
         // generating JSON
         Gson gson = new Gson();
-        String heightjson = gson.toJson(new Measure(contact.uid, "height", height));
+        String heightjson = gson.toJson(new Measure(contact.uid, "height", height, ""));
 
         // is all good? if not report the error
         if (!cp.newHeight(heightjson))
@@ -88,7 +88,7 @@ public class BotBusiness implements Tags {
 
         // generating JSON
         Gson gson = new Gson();
-        String weightjson = gson.toJson(new Measure(contact.uid, "weight", weight));
+        String weightjson = gson.toJson(new Measure(contact.uid, "weight", weight, ""));
 
         // is all good? if not report the error
         if (!cp.newWeight(weightjson))
@@ -118,8 +118,8 @@ public class BotBusiness implements Tags {
         ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
 
         // is the userid already registered?
-        if (!cp.userExist(contact.uid))
-            return genNotRegisteredResponse(contact);
+        //if (!cp.userExist(contact.uid))
+        //    return genNotRegisteredResponse(contact);
 
         String res = cp.getMeasures(contact.uid, type);
 
@@ -139,7 +139,7 @@ public class BotBusiness implements Tags {
 
         // generating JSON
         Gson gson = new Gson();
-        String measure = gson.toJson(new Measure(contact.uid, type, parameter));
+        String measure = gson.toJson(new Measure(contact.uid, type, parameter, ""));
 
         // is all good? if not report the error
         if (!cp.newMeasure(measure))
@@ -157,9 +157,6 @@ public class BotBusiness implements Tags {
     }
 
     public boolean updateGoalCheck_newCondition(String condition) {
-        System.out.println("?????????????????????");
-        System.out.println(condition);
-
         return condition.equals("<") || condition.equals("<=") || condition.equals(">") || condition.equals(">=");
     }
 
@@ -229,9 +226,22 @@ public class BotBusiness implements Tags {
         return new String("Measure of " + type + " updated");
     }
 
-    private String genMeasuresList(String res) {
+    private String genMeasuresList(String json) {
 
         // TODO
+        Gson gson = new Gson();
+
+        Measure[] measures;
+        measures = gson.fromJson(json, Measure[].class);
+
+        String res = "Measures : \n";
+
+        for (Measure m : measures) {
+            res += m.measureType +
+                    " | " + m.measureValue +
+                    " | " + m.date + "\n";
+        }
+
         return res;
 
     }
@@ -262,7 +272,7 @@ public class BotBusiness implements Tags {
 
     public String genInfoMessage() {
 
-        return new String("Bot commands : balblablabsdasjd"); //TODO
+        return new String("Bot commands : \\start\n\\measures\n\\seeprofile\n\\adaptor"); //TODO
     }
 
     public String genErrorMessage(String where) {
