@@ -86,7 +86,6 @@ public class ClientProcessCentric extends RestClient {
         return getApi(USER_PROFILE + "/" + uid);
     }
 
-
     public String getMeasures(Long uid, String type) {
         return getApi(SHOW_MEASURES + "/" + uid + "/" + type);
     }
@@ -160,6 +159,10 @@ public class ClientProcessCentric extends RestClient {
 
     public Boolean updateGoal(Long uid, String oldTitle, String goalJson) {
         return newApi(UPDATE_GOAL + "/" + uid + "/" + oldTitle, goalJson);
+    }
+
+    public boolean updatePerson(String user) {
+        return newUserRegistration(user);
     }
 
     public String getBmi(Long uid) {

@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by matteo on 09/05/17.
  */
-public class CustomKeyboards {
+public class CustomKeyboards implements Tags {
 
     // DEFAULT keyboard
     public static ReplyKeyboardMarkup getDefaultKeyboard() {
@@ -21,12 +21,15 @@ public class CustomKeyboards {
 
         List<KeyboardRow> keyboard = new ArrayList();
         KeyboardRow row = new KeyboardRow();
-        row.add("/seeprofile");
-        row.add("/measures");
+        row.add(TAG_SEEPROFILE);
+        row.add(TAG_MEASURES);
         keyboard.add(row);
         row = new KeyboardRow();
-        row.add("/goals");
-        row.add("/bmi");
+        row.add(TAG_GOALS);
+        row.add(TAG_GETBMI);
+        keyboard.add(row);
+        row = new KeyboardRow();
+        row.add(TAG_INFO);
         keyboard.add(row);
 
         keyboardMarkup.setKeyboard(keyboard);
@@ -71,8 +74,35 @@ public class CustomKeyboards {
         return keyboardMarkup;
     }
 
+    public static InlineKeyboardMarkup getInlineKeyboard(String[] lbls, String[] msgs) {
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
 
-    // DEFAULT keyboard
+        ArrayList keyboard = new ArrayList();
+        ArrayList row = new ArrayList();
+
+        /*
+        InlineKeyboardButton btn1 = new InlineKeyboardButton();
+        btn1.setText(lbl1);
+        btn1.setCallbackData(msg1);
+        InlineKeyboardButton btn2 = new InlineKeyboardButton();
+        btn2.setText(lbl2);
+        btn2.setCallbackData(msg2);*/
+
+        for (int i = 0; i < lbls.length; i++) {
+            InlineKeyboardButton btn = new InlineKeyboardButton();
+            btn.setText(lbls[i]);
+            btn.setCallbackData(msgs[i]);
+            row.add(btn);
+        }
+
+        keyboard.add(row);
+
+        keyboardMarkup.setKeyboard(keyboard);
+
+        return keyboardMarkup;
+    }
+
+
     public static InlineKeyboardMarkup getInlineKeyboard(String lbl1, String msg1, String lbl2, String msg2) {
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
 

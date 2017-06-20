@@ -127,12 +127,23 @@ public class BotBusiness implements Tags {
         if (!cp.userExist(contact.uid))
             return genNotRegisteredResponse(contact);
 
-        String res = cp.getMeasures(contact.uid, type);
+        String res = "";
+        if (type.equals("weight") || type.equals("height") || type.equals("step"))
+            res = this.genMeasuresList(cp.getMeasures(contact.uid, type));
+        else if (type.equals("waist") || type.equals("hip")) {
+            String person = cp.seeProfile(contact.uid);
+            // Format the output
+            Gson gson = new Gson();
+            HashMap<String, String> profile = new HashMap<String, String>();
+            profile = (HashMap<String, String>) gson.fromJson(person, profile.getClass());
+
+            res = "Measure:\n\nActual " + type + " : " + profile.get(type);
+        }
 
         if (res.equals(""))
-            return this.genErrorMessage("seeProfile");
+            return this.genErrorMessage("showMeasures");
 
-        return this.genMeasuresList(res);
+        return res;
     }
 
     public String updateMeasure(User contact, String parameter, String type) {
@@ -143,19 +154,33 @@ public class BotBusiness implements Tags {
         if (!cp.userExist(contact.uid))
             return genNotRegisteredResponse(contact);
 
-        // generating JSON
-        Gson gson = new Gson();
-
         // Replace , with . for avoid errors
         parameter = parameter.replace(",", ".");
 
-        String measure = gson.toJson(new Measure(contact.uid, type, parameter, ""));
+        // generating JSON
+        Gson gson = new Gson();
 
-        // is all good? if not report the error
-        if (!cp.newMeasure(measure))
-            return this.genErrorMessage("updateMeasure");
+        if (type.equals("weight") || type.equals("steps") || type.equals("height")) {
 
-        return this.genUpdateMeasureSucess(type);
+            String measure = gson.toJson(new Measure(contact.uid, type, parameter, ""));
+            // is all good? if not report the error
+            if (!cp.newMeasure(measure))
+                return this.genErrorMessage("updateMeasure");
+            return this.genUpdateMeasureSucess(type);
+        } else {
+            String userjson = cp.seeProfile(contact.uid);
+
+            HashMap<String, String> profile = new HashMap<String, String>();
+            profile = (HashMap<String, String>) gson.fromJson(userjson, profile.getClass());
+            profile.put(type, parameter);
+
+            userjson = gson.toJson(profile, profile.getClass());
+            if (!cp.updatePerson(userjson))
+                return this.genErrorMessage("updateMeasure");
+            return this.genUpdateMeasureSucess(type);
+        }
+
+
     }
 
     public boolean updateGoalCheck_newTitle(String title) {
@@ -272,7 +297,9 @@ public class BotBusiness implements Tags {
         String strOut = "Name : " + profile.get("name") +
                 "\nSurname : " + profile.get("surname") +
                 "\nHeight : " + profile.get("height") +
-                "\nActual weight : " + profile.get("weight");
+                "\nActual weight : " + profile.get("weight") +
+                "\nActual Waist : " + profile.get("waist") +
+                "\nActual Hip : " + profile.get("hip");
 
         return strOut;
     }

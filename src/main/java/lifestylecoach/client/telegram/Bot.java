@@ -188,11 +188,15 @@ public class Bot extends TelegramLongPollingBot implements Tags {
             // if the user is not registered
             if (res.equals(botBusiness.genNotRegisteredResponse(contact)))
                 response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
-            else
-                response.setReplyMarkup(CustomKeyboards.getInlineKeyboard(LBL_SHOWMEASURES_WEIGHT,
-                        TAG_SHOWMEASURES_WEIGHT,
-                        LBL_SHOWMEASURES_STEP,
-                        TAG_SHOWMEASURES_STEP));
+            else {
+                String[] buttonslbls = {LBL_SHOWMEASURES_WEIGHT, LBL_SHOWMEASURES_STEP,
+                        LBL_SHOWMEASURES_HEIGHT, LBL_SHOWMEASURES_WAIST,
+                        LBL_SHOWMEASURES_HIP};
+                String[] buttonsmsgs = {TAG_SHOWMEASURES_WEIGHT, TAG_SHOWMEASURES_STEP,
+                        TAG_SHOWMEASURES_HEIGHT, TAG_SHOWMEASURES_WAIST,
+                        TAG_SHOWMEASURES_HIP};
+                response.setReplyMarkup(CustomKeyboards.getInlineKeyboard(buttonslbls, buttonsmsgs));
+            }
 
             response.setText(res);
         } else if (command.equals(TAG_SHOWMEASURES_WEIGHT)) {
@@ -207,6 +211,24 @@ public class Bot extends TelegramLongPollingBot implements Tags {
             response.setReplyMarkup(CustomKeyboards.getNewRowKeyboard(TAG_UPDATESTEPS, TAG_BACK));
 
             response.setText(res);
+        } else if (command.equals(TAG_SHOWMEASURES_HEIGHT)) {
+            res = botBusiness.showMeasures(contact, "height");
+
+            response.setReplyMarkup(CustomKeyboards.getNewRowKeyboard(TAG_UPDATEHEIGHT, TAG_BACK));
+
+            response.setText(res);
+        } else if (command.equals(TAG_SHOWMEASURES_WAIST)) {
+            res = botBusiness.showMeasures(contact, "waist");
+
+            response.setReplyMarkup(CustomKeyboards.getNewRowKeyboard(TAG_UPDATEWAIST, TAG_BACK));
+
+            response.setText(res);
+        } else if (command.equals(TAG_SHOWMEASURES_HIP)) {
+            res = botBusiness.showMeasures(contact, "hip");
+
+            response.setReplyMarkup(CustomKeyboards.getNewRowKeyboard(TAG_UPDATEHIP, TAG_BACK));
+
+            response.setText(res);
         } else if (command.equals(TAG_UPDATEWEIGHT)) {
             //res = botBusiness.updateMeasure(contact, "weight");
             res = botBusiness.genUpdateMeasure("weight");
@@ -216,6 +238,24 @@ public class Bot extends TelegramLongPollingBot implements Tags {
             response.setText(res);
         } else if (command.equals(TAG_UPDATESTEPS)) {
             res = botBusiness.genUpdateMeasure("step");
+
+            response.setReplyMarkup(CustomKeyboards.getForceReply());
+
+            response.setText(res);
+        } else if (command.equals(TAG_UPDATEHEIGHT)) {
+            res = botBusiness.genUpdateMeasure("height");
+
+            response.setReplyMarkup(CustomKeyboards.getForceReply());
+
+            response.setText(res);
+        } else if (command.equals(TAG_UPDATEWAIST)) {
+            res = botBusiness.genUpdateMeasure("waist");
+
+            response.setReplyMarkup(CustomKeyboards.getForceReply());
+
+            response.setText(res);
+        } else if (command.equals(TAG_UPDATEHIP)) {
+            res = botBusiness.genUpdateMeasure("hip");
 
             response.setReplyMarkup(CustomKeyboards.getForceReply());
 
@@ -243,6 +283,12 @@ public class Bot extends TelegramLongPollingBot implements Tags {
             //response.setReplyMarkup(CustomKeyboards.getInlineVerticalKeyboard(goals));
             response.setReplyMarkup(CustomKeyboards.getNewColumnKeyboard(goals));
 
+            response.setText(res);
+
+        } else if (command.equals(TAG_INFO)) {
+            res = botBusiness.genInfoMessage();
+
+            response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
             response.setText(res);
 
         } else if (command.equals(TAG_BACK)) {
@@ -320,6 +366,21 @@ public class Bot extends TelegramLongPollingBot implements Tags {
                 response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
                 // TODO AGGIUNGERE CONTROLLI
                 response.setText(res);
+            } else if (replyMessage.equals(botBusiness.genUpdateMeasure("height"))) {
+                res = botBusiness.updateMeasure(contact, command, "height");
+                response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+                // TODO AGGIUNGERE CONTROLLI
+                response.setText(res);
+            } else if (replyMessage.equals(botBusiness.genUpdateMeasure("waist"))) {
+                res = botBusiness.updateMeasure(contact, command, "waist");
+                response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+                // TODO AGGIUNGERE CONTROLLI
+                response.setText(res);
+            } else if (replyMessage.equals(botBusiness.genUpdateMeasure("hip"))) {
+                res = botBusiness.updateMeasure(contact, command, "hip");
+                response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+                // TODO AGGIUNGERE CONTROLLI
+                response.setText(res);
             } else if (replyMessage.split(" ")[0].equals(TAG_GOALS_UPDATE)) {
 
                 res = replyMessage + command;
@@ -373,10 +434,10 @@ public class Bot extends TelegramLongPollingBot implements Tags {
                 response.setText(res);
             }
         } else {// TODO measures , goals , adaptor
-            response = null; //TODO
-
-            //response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
-
+            //response = null; //TODO
+            response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+            res = botBusiness.back(contact);
+            response.setText("What ? " + res);
         }
 
         return response;
