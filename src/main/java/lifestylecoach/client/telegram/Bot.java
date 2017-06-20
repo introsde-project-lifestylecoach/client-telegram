@@ -45,11 +45,6 @@ public class Bot extends TelegramLongPollingBot implements Tags {
                     message.getFrom().getFirstName(),
                     message.getFrom().getLastName());
 
-
-            System.out.println("\n========================================");
-            System.out.println(contact.uid);
-            System.out.println("========================================");
-
             String replyMessage = null;
 
             if (message.isReply()) {
@@ -88,6 +83,17 @@ public class Bot extends TelegramLongPollingBot implements Tags {
                 response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
             // if something go wrong send default keyboard
             if (res.equals(botBusiness.genErrorMessage(TAG_START)))
+                response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+
+            response.setText(res);
+        } else if (command.equals(TAG_GETBMI)) {
+            res = botBusiness.getBmi(contact);
+
+            // if the user is not registered
+            if (!res.equals(botBusiness.genNotRegisteredResponse(contact)))
+                response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+            // if something go wrong send default keyboard
+            if (res.equals(botBusiness.genErrorMessage(TAG_GETBMI)))
                 response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
 
             response.setText(res);
@@ -166,8 +172,6 @@ public class Bot extends TelegramLongPollingBot implements Tags {
             response.setText(res);
         } else if (command.equals(TAG_SHOWGOALS)) {
             res = botBusiness.getGoals(contact);
-
-            System.out.println(res);
 
             Gson gson = new Gson();
             Goal vGoals[];

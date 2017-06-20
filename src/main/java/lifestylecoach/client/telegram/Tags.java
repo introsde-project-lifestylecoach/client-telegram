@@ -27,6 +27,7 @@ public interface Tags {
     String LBL_SHOWMEASURES_STEP = "step";
     String TAG_SHOWMEASURES_STEP = "/showsteps";
     String TAG_SHOWGOALS = "/goals";
+    String TAG_GETBMI = "/bmi";
     String TAG_ADDMEASURE = "/update";
 
     String TAG_MEASURETYPE = "/measuretype";

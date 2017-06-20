@@ -19,6 +19,7 @@ public class ClientProcessCentric extends RestClient {
     public static final String SHOW_MEASURES = "/measure/show";
     public static final String SHOW_GOALS = "/goal/show";
     public static final String UPDATE_GOAL = "/goal/new";
+    public static final String BMI = "user/bmi";
 
     public ClientProcessCentric(String serviceURI) {
         super(serviceURI);
@@ -51,13 +52,11 @@ public class ClientProcessCentric extends RestClient {
     }
 
     public boolean newNameSurname(String user) {
-        // TODO fare json di surname
         return newApi(NEW_SURNAME, user);
     }
 
 
     public boolean newHeight(String measure) {
-        // TODO fare json di height
 
         /*
         * something like
@@ -159,5 +158,9 @@ public class ClientProcessCentric extends RestClient {
 
     public Boolean updateGoal(Long uid, String oldTitle, String goalJson) {
         return newApi(UPDATE_GOAL + "/" + uid + "/" + oldTitle, goalJson);
+    }
+
+    public String getBmi(Long uid) {
+        return getApi(BMI + "/" + uid);
     }
 }

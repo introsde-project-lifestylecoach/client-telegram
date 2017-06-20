@@ -26,7 +26,7 @@ public class CustomKeyboards {
         keyboard.add(row);
         row = new KeyboardRow();
         row.add("/goals");
-        row.add("/adaptor"); // TODO TMP
+        row.add("/bmi");
         keyboard.add(row);
 
         keyboardMarkup.setKeyboard(keyboard);

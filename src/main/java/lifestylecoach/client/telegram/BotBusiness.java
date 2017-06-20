@@ -86,6 +86,9 @@ public class BotBusiness implements Tags {
         // parse command usually in this form : "/command surname"
         String weight = command.split(" ")[1];
 
+        // Replace , with . for avoid errors
+        weight = weight.replace(",", ".");
+
         // generating JSON
         Gson gson = new Gson();
         String weightjson = gson.toJson(new Measure(contact.uid, "weight", weight, ""));
@@ -118,8 +121,8 @@ public class BotBusiness implements Tags {
         ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
 
         // is the userid already registered?
-        //if (!cp.userExist(contact.uid))
-        //    return genNotRegisteredResponse(contact);
+        if (!cp.userExist(contact.uid))
+            return genNotRegisteredResponse(contact);
 
         String res = cp.getMeasures(contact.uid, type);
 
@@ -139,6 +142,10 @@ public class BotBusiness implements Tags {
 
         // generating JSON
         Gson gson = new Gson();
+
+        // Replace , with . for avoid errors
+        parameter = parameter.replace(",", ".");
+
         String measure = gson.toJson(new Measure(contact.uid, type, parameter, ""));
 
         // is all good? if not report the error
@@ -195,7 +202,13 @@ public class BotBusiness implements Tags {
         goal.title = rows[1].split(":")[1];
         goal.description = rows[2].split(":")[1];
         goal.status = false;
-        goal.condition = rows[3].split(":")[1] + " " + rows[4].split(":")[1] + " " + rows[5].split(":")[1];
+        String typeIncrease = "";
+        if (rows[4].split(":")[1].equals(">"))
+            typeIncrease = "increase";
+        else if (rows[4].split(":")[1].equals("<"))
+            typeIncrease = "decrease";
+
+        goal.condition = rows[3].split(":")[1] + " " + typeIncrease + " " + rows[5].split(":")[1];
 
         Gson gson = new Gson();
         String goalJson = gson.toJson(goal, Goal.class);
@@ -234,7 +247,7 @@ public class BotBusiness implements Tags {
         Measure[] measures;
         measures = gson.fromJson(json, Measure[].class);
 
-        String res = "Measures : \n";
+        String res = "Measures : \n\n";
 
         for (Measure m : measures) {
             res += m.measureType +
@@ -302,5 +315,28 @@ public class BotBusiness implements Tags {
     public String genUpdateMeasure(String type) {
         return new String("Insert new " + type + " value:");
 
+    }
+
+    public String getBmi(User contact) {
+
+        String res = "";
+
+
+        ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
+
+        // is the userid already registered?
+        if (!cp.userExist(contact.uid))
+            return genNotRegisteredResponse(contact);
+
+        res = cp.getBmi(contact.uid);
+
+        if (res.equals(""))
+            return this.genErrorMessage("getBmi");
+
+        return genBmi(res);
+    }
+
+    private String genBmi(String res) {
+        return res; //TODO
     }
 }
