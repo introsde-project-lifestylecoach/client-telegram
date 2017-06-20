@@ -1,6 +1,7 @@
 package lifestylecoach.client.telegram;
 
 import com.google.gson.Gson;
+import lifestylecoach.client.models.Bmi;
 import lifestylecoach.client.models.Goal;
 import lifestylecoach.client.models.Measure;
 import lifestylecoach.client.models.User;
@@ -339,7 +340,29 @@ public class BotBusiness implements Tags {
         return genBmi(res);
     }
 
-    private String genBmi(String res) {
+    private String genBmi(String bmijson) {
+
+        Gson gson = new Gson();
+        Bmi bmi = gson.fromJson(bmijson, Bmi.class);
+
+        String res = "";
+
+        res += "\nYour bmi value is ";
+        res += bmi.bmiValue + " and your ideal weight is ";
+        res += bmi.idealWeight + "\n";
+
+        res += "You are ";
+        res += bmi.bmiStatus + "\n";
+
+        res += "\nYou have a ";
+        res += bmi.bmiRisk + "\n";
+
+        res += "\nYour risk is ";
+        res += bmi.whrStatus + "\n";
+
+        res += "\nYou should eat ";
+        res += bmi.bmrValue + " calories per day";
+
         return res; //TODO
     }
 
