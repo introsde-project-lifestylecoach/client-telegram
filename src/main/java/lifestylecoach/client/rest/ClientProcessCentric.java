@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class ClientProcessCentric extends RestClient {
 
-    public static final String NEW_SURNAME = "/user/new";
+    public static final String NEW_USER = "/user/new";
     public static final String USER_EXIST = "/user/exist";
     public static final String USER_PROFILE = "/user/profile";
     public static final String NEW_MEASURE = "/measure/new";
@@ -52,7 +52,7 @@ public class ClientProcessCentric extends RestClient {
     }
 
     public boolean newNameSurname(String user) {
-        return newApi(NEW_SURNAME, user);
+        return newApi(NEW_USER, user);
     }
 
 
@@ -162,5 +162,9 @@ public class ClientProcessCentric extends RestClient {
 
     public String getBmi(Long uid) {
         return getApi(BMI + "/" + uid);
+    }
+
+    public boolean newUserRegistration(String user) {
+        return newApi(NEW_USER, user);
     }
 }

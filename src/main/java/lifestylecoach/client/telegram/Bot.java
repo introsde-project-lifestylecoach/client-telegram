@@ -43,7 +43,11 @@ public class Bot extends TelegramLongPollingBot implements Tags {
             // gen my profile
             User contact = new User(chatId,
                     message.getFrom().getFirstName(),
-                    message.getFrom().getLastName());
+                    message.getFrom().getLastName(),
+                    "",
+                    "",
+                    "",
+                    "");
 
             String replyMessage = null;
 
@@ -97,18 +101,60 @@ public class Bot extends TelegramLongPollingBot implements Tags {
                 response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
 
             response.setText(res);
+        } else if (command.equals(TAG_REGISTRATION)) {
+            res = botBusiness.genRegSurname();
+            response.setText(TAG_REGISTRATION + "\n" + res);
+            response.setReplyMarkup(CustomKeyboards.getForceReply());
         }
-        //take only the first part of the string, ex. /surname smith -> /surname
-        else if (command.split(" ")[0].equals(TAG_REGSURNAME)) {
-            res = botBusiness.registrationSurname(contact, command);
+
+
+
+
+/*
+
+
+        else if(command.split(" ")[0].equals(TAG_REGSEX)){
+
+            res = botBusiness.registrationSex(contact, command);
 
             // if something go wrong send default keyboard
-            if (res.equals(botBusiness.genErrorMessage(TAG_REGSURNAME)))
+            if (res.equals(botBusiness.genErrorMessage(TAG_REGSEX)))
                 response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
 
             response.setText(res);
 
-        } else if (command.split(" ")[0].equals(TAG_REGHEIGHT)) {
+        } else if(command.split(" ")[0].equals(TAG_REGBIRTHDATE)){
+
+            res = botBusiness.registrationBirthDate(contact, command);
+
+            // if something go wrong send default keyboard
+            if (res.equals(botBusiness.genErrorMessage(TAG_REGSEX)))
+                response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+
+            response.setText(res);
+
+        }
+        else if(command.split(" ")[0].equals(TAG_REGWAIST)){
+
+            res = botBusiness.registrationWaist(contact, command);
+
+            // if something go wrong send default keyboard
+            if (res.equals(botBusiness.genErrorMessage(TAG_REGSEX)))
+                response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+
+            response.setText(res);
+        }
+        else if(command.split(" ")[0].equals(TAG_REGHIP)){
+
+            res = botBusiness.registrationHip(contact, command);
+
+            // if something go wrong send default keyboard
+            if (res.equals(botBusiness.genErrorMessage(TAG_REGSEX)))
+                response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+
+            response.setText(res);
+        }
+        else if (command.split(" ")[0].equals(TAG_REGHEIGHT)) {
             res = botBusiness.registrationHeight(contact, command);
 
             // if something go wrong send default keyboard
@@ -124,7 +170,11 @@ public class Bot extends TelegramLongPollingBot implements Tags {
                 response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
 
             response.setText(res);
-        } else if (command.equals(TAG_SEEPROFILE)) {
+        }
+        */
+
+
+        else if (command.equals(TAG_SEEPROFILE)) {
             res = botBusiness.seeProfile(contact);
 
             // if the user is not registered
@@ -226,13 +276,39 @@ public class Bot extends TelegramLongPollingBot implements Tags {
 
             }
             response.setText(res);
-
         }
         // REPLIES
         else if (replyMessage != null) {
             //String[] vReplies = replyMessage.split(" : ");
 
-            if (replyMessage.equals(botBusiness.genUpdateMeasure("weight"))) {
+            if (replyMessage.startsWith(TAG_REGISTRATION)) {
+
+                res = replyMessage;
+                String[] regString = res.split("\n");
+
+                response.setReplyMarkup(CustomKeyboards.getForceReply());
+
+                if (regString.length == 2) {
+                    res += botBusiness.genRegSex(command);
+                } else if (regString.length == 3) {
+                    res += botBusiness.genRegBirthDate(command);
+                } else if (regString.length == 4) {
+                    res += botBusiness.genRegHeight(command);
+                } else if (regString.length == 5) {
+                    res += botBusiness.genRegWeight(command);
+                } else if (regString.length == 6) {
+                    res += botBusiness.genRegWaist(command);
+                } else if (regString.length == 7) {
+                    res += botBusiness.genRegHip(command);
+                } else if (regString.length == 8) {
+                    res = botBusiness.registration(contact, res + command);
+                } else {
+                    System.err.println("Error on registration");
+                }
+
+                response.setText(res);
+
+            } else if (replyMessage.equals(botBusiness.genUpdateMeasure("weight"))) {
                 res = botBusiness.updateMeasure(contact, command, "weight");
                 response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
                 // TODO AGGIUNGERE CONTROLLI
@@ -251,7 +327,6 @@ public class Bot extends TelegramLongPollingBot implements Tags {
                 // if(rows.length == 1)
                 //   res += "\nNew Title :";
                 //else
-
 
                 response.setReplyMarkup(CustomKeyboards.getForceReply());
 

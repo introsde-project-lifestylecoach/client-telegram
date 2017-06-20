@@ -17,9 +17,13 @@ public interface Tags {
 
     // COMMAND TAGS FOR THE TELEGRAM BOT
     String TAG_START = "/start";
-    String TAG_REGSURNAME = "/regsurname";
+    String TAG_REGISTRATION = "/registration";
     String TAG_REGHEIGHT = "/regheight";
     String TAG_REGWEIGHT = "/regweight";
+    String TAG_REGSEX = "/regsex";
+    String TAG_REGBIRTHDATE = "/regbirthdate";
+    String TAG_REGWAIST = "/regweist";
+    String TAG_REGHIP = "/reghip";
     String TAG_SEEPROFILE = "/seeprofile";
     String TAG_MEASURES = "/measures";
     String LBL_SHOWMEASURES_WEIGHT = "weight";

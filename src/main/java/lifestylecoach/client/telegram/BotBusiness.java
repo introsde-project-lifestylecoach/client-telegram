@@ -42,6 +42,7 @@ public class BotBusiness implements Tags {
         return new String("Back to main menù");
     }
 
+    /* OLD METHODS
     // Save the name and the surname of the user into the db
     public String registrationSurname(User contact, String command) {
 
@@ -99,6 +100,7 @@ public class BotBusiness implements Tags {
 
         return this.genRegFinish(contact);
     }
+    */
 
     public String seeProfile(User contact) {
 
@@ -278,9 +280,10 @@ public class BotBusiness implements Tags {
         return new String("Good! The registration operation is finished! \n") + genInfoMessage();
     }
 
-    private String genRegWeight(User contact) {
-        return new String("Wonderful! Just a bit of patience, this is the last step! Insert your actual weight! " +
-                "(write " + TAG_REGWEIGHT + " followed by your weight)");
+    public String genRegWeight(String command) {
+        //return new String("Wonderful! Just a bit of patience, this is the last step! Insert your actual weight! " +
+        //        "(write " + TAG_REGWEIGHT + " followed by your weight)");
+        return new String(command + "\nYour weight (kg) : ");
     }
 
     public String genInfoMessage() {
@@ -295,13 +298,13 @@ public class BotBusiness implements Tags {
     // Responses
     public String genNotRegisteredResponse(User contact) {
         return new String("Hi " + contact.name + "! Welcome to " + this.botName + ". For using our bot, you have" +
-                " to insert a couple of informations about yourself! First, what's your surname? (write " + TAG_REGSURNAME +
-                " followed by your surname)");
+                " to insert a couple of informations about yourself! Proceed with the " + TAG_REGISTRATION);
     }
 
-    public String genRegHeight(User contact) {
-        return new String("Well done " + contact.name + ", now insert your height! (write " + TAG_REGHEIGHT + " " +
-                "followed by your height)");
+    public String genRegHeight(String command) {
+        //return new String("Well done " + contact.name + ", now insert your height! (write " + TAG_REGHEIGHT + " " +
+        //        "followed by your height)");
+        return new String(command + "\nYour height (cm) :");
     }
 
     private String genOnStartResponse(User contact) {
@@ -338,5 +341,79 @@ public class BotBusiness implements Tags {
 
     private String genBmi(String res) {
         return res; //TODO
+    }
+
+    public String genRegBirthDate(String command) {
+        return new String(command + "\nBirthdate (YYYY/MM//DD) : ");
+    }
+
+    public String genRegSurname() {
+        return new String("Surname : ");
+    }
+
+    public String genRegSex(String command) {
+        return new String(command + "\nSex (m or f) : ");
+    }
+
+    public String genRegWaist(String command) {
+        return new String(command + "\nYour waist measure (cm) : ");
+    }
+
+    public String genRegHip(String command) {
+        return new String(command + "\nYour hip measure (cm) : ");
+    }
+
+    public String registration(User contact, String command) {
+
+        ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
+
+        System.out.println(command);
+
+        String[] rows = command.split("\n");
+
+        // row 1 surname
+        String surname = rows[1].split(":")[1];
+        surname = surname.replace(" ", "");
+        // row 2 sex
+        String sex = rows[2].split(":")[1];
+        sex = sex.replace(" ", "");
+        // row 3 birthdate
+        String birthdate = rows[3].split(":")[1];
+        birthdate = birthdate.replace(" ", "");
+        // row 4 height
+        String height = rows[4].split(":")[1];
+        height = height.replace(" ", "");
+        // row 5 weight
+        String weight = rows[5].split(":")[1];
+        weight = weight.replace(" ", "");
+        // row 6 waist
+        String waist = rows[6].split(":")[1];
+        waist = waist.replace(" ", "");
+        // row 7 hip
+        String hip = rows[7].split(":")[1];
+        hip = hip.replace(" ", "");
+
+        Gson gson = new Gson();
+
+        /* Registration of the new User */
+        // generating JSON
+        String userJson = gson.toJson(new User(contact.uid, contact.name, surname, sex, birthdate, waist, hip));
+        // is all good? if not report the error
+        if (!cp.newUserRegistration(userJson))
+            return this.genErrorMessage("registration - user");
+
+        /*Add the measures height and weight*/
+        // generating JSON
+        String heightjson = gson.toJson(new Measure(contact.uid, "height", height, ""));
+        String weightjson = gson.toJson(new Measure(contact.uid, "weight", weight, ""));
+
+        // is all good? if not report the error
+        if (!cp.newMeasure(heightjson))
+            return this.genErrorMessage("registration - height");
+        // is all good? if not report the error
+        if (!cp.newMeasure(weightjson))
+            return this.genErrorMessage("registration - weight");
+
+        return this.genRegFinish(contact);
     }
 }
