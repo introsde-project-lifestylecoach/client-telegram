@@ -367,6 +367,9 @@ public class BotBusiness implements Tags {
 
         ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
 
+        if (cp.userExist(contact.uid))
+            return this.genErrorMessage("registration - user");
+
         System.out.println(command);
 
         String[] rows = command.split("\n");
@@ -398,7 +401,8 @@ public class BotBusiness implements Tags {
         /* Registration of the new User */
         // generating JSON
         String userJson = gson.toJson(new User(contact.uid, contact.name, surname, sex, birthdate, waist, hip));
-        // is all good? if not report the error
+
+
         if (!cp.newUserRegistration(userJson))
             return this.genErrorMessage("registration - user");
 

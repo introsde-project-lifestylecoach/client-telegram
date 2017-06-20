@@ -105,7 +105,7 @@ public class ClientProcessCentric extends RestClient {
             return false; //TODO se non c'è connessione torna che è falso, che è come dire "l'utente non esiste"
     }
 
-    public boolean newApi(String address, String parameter) {
+    public boolean newApi(String path, String parameter) {
 
         Response response;
         int status;
@@ -114,14 +114,14 @@ public class ClientProcessCentric extends RestClient {
         // TODO CECK OF THE RESPONSE
 
         try {
-            response = service.path(address)
+            response = service.path(path)
                     .request()
                     .accept(MediaType.APPLICATION_JSON)
                     .post(Entity.json(parameter));
 
             status = response.getStatus();
 
-            System.out.println(status);
+            System.out.println(":: POST -> status \"" + path + "\" : " + status);
 
             if (status == 202 || status == 200 || status == 201) {
                 res = true;
@@ -145,6 +145,8 @@ public class ClientProcessCentric extends RestClient {
                     .get();
 
             status = response.getStatus();
+
+            System.out.println(":: GET -> status \"" + path + "\" : " + status);
 
             if (status == 200) {
                 res = response.readEntity(String.class);

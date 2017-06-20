@@ -302,6 +302,8 @@ public class Bot extends TelegramLongPollingBot implements Tags {
                     res += botBusiness.genRegHip(command);
                 } else if (regString.length == 8) {
                     res = botBusiness.registration(contact, res + command);
+                    response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+
                 } else {
                     System.err.println("Error on registration");
                 }
