@@ -153,4 +153,26 @@ public class CustomKeyboards implements Tags {
 
         // TODO: 16/06/17
     }
+
+    // Commands1.length must be equal to commands2.length
+    public static ReplyKeyboard getNewGridKeyboard(String[] commands1, String[] commands2) {
+
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+
+        List<KeyboardRow> keyboard = new ArrayList();
+
+        for (int i = 0; i < commands1.length; i++) {
+            KeyboardRow row = new KeyboardRow();
+            if (commands1[i] != null)
+                row.add(commands1[i]);
+            if (commands2[i] != null)
+                row.add(commands2[i]);
+            keyboard.add(row);
+        }
+
+        keyboardMarkup.setKeyboard(keyboard);
+
+        return keyboardMarkup;
+
+    }
 }

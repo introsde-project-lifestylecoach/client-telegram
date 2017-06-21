@@ -2,6 +2,7 @@ package lifestylecoach.client.rest;
 
 
 import com.google.gson.Gson;
+import lifestylecoach.client.models.Success;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -19,6 +20,7 @@ public class ClientProcessCentric extends RestClient {
     public static final String SHOW_MEASURES = "/measure/show";
     public static final String SHOW_GOALS = "/goal/show";
     public static final String UPDATE_GOAL = "/goal/new";
+    public static final String DELETE_GOAL = "goal/delete";
     public static final String BMI = "user/bmi";
 
     public ClientProcessCentric(String serviceURI) {
@@ -172,4 +174,15 @@ public class ClientProcessCentric extends RestClient {
     public boolean newUserRegistration(String user) {
         return newApi(NEW_USER, user);
     }
+
+    public boolean deleteGoal(Long uid, String title) {
+
+        Gson gson = new Gson();
+        //if (gson.fromJson(getApi(DELETE_GOAL+"/"+uid+"/"+title.replace(" ","_")), Success.class).success)
+        //    return true;
+
+        String resjson = getApi(DELETE_GOAL + "/" + uid + "/" + title.replace(" ", "_"));
+        return gson.fromJson(resjson, Success.class).success;
+    }
+
 }

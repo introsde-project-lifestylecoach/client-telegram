@@ -483,4 +483,17 @@ public class BotBusiness implements Tags {
 
         return this.genRegFinish(contact);
     }
+
+    public String deleteGoal(User contact, String title) {
+
+        ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
+
+        if (!cp.deleteGoal(contact.uid, title))
+            genErrorMessage("deleteGoal");
+        return genDeleteGoalMessage(title);
+    }
+
+    private String genDeleteGoalMessage(String title) {
+        return new String("Goal " + title + " successfully removed");
+    }
 }

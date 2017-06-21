@@ -10,6 +10,7 @@ public interface Tags {
     String TAG_REPLY_MEASURES_UPDATE3 = "3. Measure saved";
     //private static final String TAG_GOALS = "/goals";
     String TAG_GOALS_UPDATE = "/modify";
+    String TAG_GOALS_DELETE = "/delete";
     String TAG_GOALS_NEW = "/new goal";
     String TAG_REPLY_GOALS_UPDATE1 = "1. Insert goal title";
     String TAG_REPLY_GOALS_UPDATE2 = "2. Now insert the description for the goal ";

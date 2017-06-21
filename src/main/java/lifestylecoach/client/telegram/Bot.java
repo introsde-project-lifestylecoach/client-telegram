@@ -269,27 +269,34 @@ public class Bot extends TelegramLongPollingBot implements Tags {
             vGoals = gson.fromJson(res, Goal[].class);
 
             String[] goals;
+            String[] deleteGoals;
             if (vGoals.length == 0) {
                 goals = new String[2];
+                deleteGoals = new String[2];
                 goals[0] = TAG_GOALS_NEW;
                 goals[1] = TAG_BACK;
+                deleteGoals[0] = null;
+                deleteGoals[1] = null;
                 res = "There aren't goals!";
             } else {
                 goals = new String[vGoals.length + 2];
+                deleteGoals = new String[vGoals.length + 2];
 
                 goals[0] = TAG_GOALS_NEW;
+                deleteGoals[0] = null;
 
                 res = "Goals : \n\n";
                 int i;
                 for (i = 0; i < vGoals.length; i++) {
                     goals[i + 1] = TAG_GOALS_UPDATE + " " + vGoals[i].title;
+                    deleteGoals[i + 1] = TAG_GOALS_DELETE + " " + vGoals[i].title;
                     res += vGoals[i].formattedText() + "\n";
-                    System.out.println(res);
                 }
                 goals[i + 1] = TAG_BACK;
             }
 
-            response.setReplyMarkup(CustomKeyboards.getNewColumnKeyboard(goals));
+            //response.setReplyMarkup(CustomKeyboards.getNewColumnKeyboard(goals));
+            response.setReplyMarkup(CustomKeyboards.getNewGridKeyboard(goals, deleteGoals));
             response.setText(EmojiParser.parseToUnicode(res));
         } else if (command.equals(TAG_INFO)) {
             res = botBusiness.genInfoMessage();
@@ -309,7 +316,6 @@ public class Bot extends TelegramLongPollingBot implements Tags {
 
             response.setText(res);
         } else if (command.equals(TAG_GOALS_NEW) || command.split(" ")[0].equals(TAG_GOALS_UPDATE)) {
-
             try {
 
                 String title = "";
@@ -336,6 +342,25 @@ public class Bot extends TelegramLongPollingBot implements Tags {
             } catch (Exception e) {
 
             }
+            response.setText(res);
+        } else if (command.split(" ")[0].equals(TAG_GOALS_DELETE)) {
+
+            // get goal title
+            String title = "";
+            String[] vCommand = command.split(" ");
+            for (int i = 1; i < vCommand.length; i++) {
+                title += vCommand[i];
+                if (i < vCommand.length - 1)
+                    title += " ";
+            }
+
+            res = botBusiness.deleteGoal(contact, title);
+
+            if (res.equals(botBusiness.genErrorMessage("deleteGoal")))
+                res = botBusiness.genErrorMessage(TAG_GOALS_DELETE);
+
+            response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
+
             response.setText(res);
         }
         // REPLIES
