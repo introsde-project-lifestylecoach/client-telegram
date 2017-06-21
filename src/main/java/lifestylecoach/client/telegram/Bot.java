@@ -291,9 +291,6 @@ public class Bot extends TelegramLongPollingBot implements Tags {
 
             response.setReplyMarkup(CustomKeyboards.getNewColumnKeyboard(goals));
             response.setText(EmojiParser.parseToUnicode(res));
-
-            response.setText(res);
-
         } else if (command.equals(TAG_INFO)) {
             res = botBusiness.genInfoMessage();
 
