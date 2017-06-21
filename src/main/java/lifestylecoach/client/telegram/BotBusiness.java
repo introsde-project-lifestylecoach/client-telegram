@@ -160,7 +160,7 @@ public class BotBusiness implements Tags {
         // generating JSON
         Gson gson = new Gson();
 
-        if (type.equals("weight") || type.equals("steps") || type.equals("height")) {
+        if (type.equals("weight") || type.equals("step") || type.equals("height")) {
 
             String measure = gson.toJson(new Measure(contact.uid, type, parameter, ""));
             // is all good? if not report the error
@@ -179,8 +179,6 @@ public class BotBusiness implements Tags {
                 return this.genErrorMessage("updateMeasure");
             return this.genUpdateMeasureSucess(type);
         }
-
-
     }
 
     public boolean updateGoalCheck_newTitle(String title) {
@@ -222,10 +220,20 @@ public class BotBusiness implements Tags {
         if (!cp.userExist(contact.uid))
             return genNotRegisteredResponse(contact);
 
-        String oldTitle = "";
+
         Goal goal = new Goal();
 
-        oldTitle = rows[0].split(" ")[1];
+        System.out.println("=============");
+        System.out.println(rows[0]);
+        String[] vOldTitle;
+        String oldTitle = "";
+        vOldTitle = rows[0].split(" ");
+        for (int i = 1; i < vOldTitle.length; i++) {
+            oldTitle += vOldTitle[i];
+            if (i < vOldTitle.length - 1) {
+                oldTitle += " ";
+            }
+        }
 
         goal.title = rows[1].split(":")[1];
         goal.description = rows[2].split(":")[1];
@@ -255,6 +263,9 @@ public class BotBusiness implements Tags {
         ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
 
         String res = cp.getGoals(contact.uid);
+
+        System.out.println("^^^^^^^^^^^^^^^^^^^^^^^");
+        System.out.println(res);
 
         if (res.equals(""))
             return this.genErrorMessage("getGoals");
@@ -297,6 +308,7 @@ public class BotBusiness implements Tags {
         String strOut = "Name : " + profile.get("name") +
                 "\nSurname : " + profile.get("surname") +
                 "\nHeight : " + profile.get("height") +
+                "\nBirthdate : " + profile.get("birthdate") +
                 "\nActual weight : " + profile.get("weight") +
                 "\nActual Waist : " + profile.get("waist") +
                 "\nActual Hip : " + profile.get("hip");

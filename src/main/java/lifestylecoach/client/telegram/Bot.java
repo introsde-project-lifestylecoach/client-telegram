@@ -1,6 +1,7 @@
 package lifestylecoach.client.telegram;
 
 import com.google.gson.Gson;
+import com.vdurmont.emoji.EmojiParser;
 import lifestylecoach.client.models.Goal;
 import lifestylecoach.client.models.User;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -267,21 +268,29 @@ public class Bot extends TelegramLongPollingBot implements Tags {
             Goal vGoals[];
             vGoals = gson.fromJson(res, Goal[].class);
 
-            //vGoals.add(new Goal("title1", "description1", false));
-            //vGoals.add(new Goal("title2", "description2", false));
-            //System.out.println(gson.toJson(vGoals,  vGoals.getClass()));
+            String[] goals;
+            if (vGoals.length == 0) {
+                goals = new String[2];
+                goals[0] = TAG_GOALS_NEW;
+                goals[1] = TAG_BACK;
+                res = "There aren't goals!";
+            } else {
+                goals = new String[vGoals.length + 2];
 
-            String[] goals = new String[vGoals.length + 1];
-            res = "Goals : \n\n";
-            int i;
-            for (i = 0; i < vGoals.length; i++) {
-                goals[i] = TAG_GOALS_UPDATE + " " + vGoals[i].title;
-                res += vGoals[i].formattedText() + "\n";
+                goals[0] = TAG_GOALS_NEW;
+
+                res = "Goals : \n\n";
+                int i;
+                for (i = 0; i < vGoals.length; i++) {
+                    goals[i + 1] = TAG_GOALS_UPDATE + " " + vGoals[i].title;
+                    res += vGoals[i].formattedText() + "\n";
+                    System.out.println(res);
+                }
+                goals[i + 1] = TAG_BACK;
             }
-            goals[i] = TAG_BACK;
 
-            //response.setReplyMarkup(CustomKeyboards.getInlineVerticalKeyboard(goals));
             response.setReplyMarkup(CustomKeyboards.getNewColumnKeyboard(goals));
+            response.setText(EmojiParser.parseToUnicode(res));
 
             response.setText(res);
 
@@ -302,10 +311,19 @@ public class Bot extends TelegramLongPollingBot implements Tags {
             response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
 
             response.setText(res);
-        } else if (command.split(" ")[0].equals(TAG_GOALS_UPDATE)) {
+        } else if (command.equals(TAG_GOALS_NEW) || command.split(" ")[0].equals(TAG_GOALS_UPDATE)) {
 
             try {
-                res = TAG_GOALS_UPDATE + " " + command.split(" ")[1];
+
+                String title = "";
+                String[] vCommand = command.split(" ");
+                for (int i = 1; i < vCommand.length; i++) {
+                    title += vCommand[i];
+                    if (i < vCommand.length - 1)
+                        title += " ";
+                }
+
+                res = TAG_GOALS_UPDATE + " " + title;
 
                 String[] rows = command.split("\n");
 
@@ -437,7 +455,7 @@ public class Bot extends TelegramLongPollingBot implements Tags {
             //response = null; //TODO
             response.setReplyMarkup(CustomKeyboards.getDefaultKeyboard());
             res = botBusiness.back(contact);
-            response.setText("What ? " + res);
+            response.setText(" What? " + res);
         }
 
         return response;

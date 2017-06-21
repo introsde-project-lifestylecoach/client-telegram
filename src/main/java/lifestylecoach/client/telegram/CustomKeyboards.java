@@ -54,7 +54,7 @@ public class CustomKeyboards implements Tags {
 
     public static ReplyKeyboardMarkup getNewColumnKeyboard(String[] commands) {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-
+        
         List<KeyboardRow> keyboard = new ArrayList();
 
         for (int i = 0; i < commands.length; i++) {
@@ -69,6 +69,7 @@ public class CustomKeyboards implements Tags {
     }
 
     public static ForceReplyKeyboard getForceReply() {
+
         ForceReplyKeyboard keyboardMarkup = new ForceReplyKeyboard();
         keyboardMarkup.setSelective(true);
         return keyboardMarkup;
@@ -150,8 +151,6 @@ public class CustomKeyboards implements Tags {
 
     public static void getRowForceKeyboard(String command1, String command2) {
 
-        // TODO: 16/06/17  
-
-
+        // TODO: 16/06/17
     }
 }

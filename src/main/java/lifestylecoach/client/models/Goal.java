@@ -22,7 +22,13 @@ public class Goal {
     }
 
     public String formattedText() {
-        return this.title + "\n" + this.description + "\n" + this.status + "\n";
+
+        String displaiedStatus = "";
+        if (status == true)
+            displaiedStatus = ":white_check_mark:";
+        else
+            displaiedStatus = ":x:";
+        return this.title + "\n" + this.description + "\n" + displaiedStatus + "\n";
     }
 
 }
