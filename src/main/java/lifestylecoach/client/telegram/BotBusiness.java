@@ -195,7 +195,8 @@ public class BotBusiness implements Tags {
 
     public boolean updateGoalCheck_type(String type) {
 
-        return type.toLowerCase().equals("weight") || type.toLowerCase().equals("step");
+        return type.toLowerCase().equals("weight") || type.toLowerCase().equals("step") ||
+                type.toLowerCase().equals("height");
     }
 
     public boolean updateGoalCheck_number(String number) {
