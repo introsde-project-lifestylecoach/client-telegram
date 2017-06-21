@@ -28,7 +28,7 @@ public class Goal {
             displaiedStatus = ":white_check_mark:";
         else
             displaiedStatus = ":x:";
-        return this.title + "\n" + this.description + "\n" + displaiedStatus + "\n";
+        return this.title + "\n" + this.description + "\n" + condition + "\n" + displaiedStatus + "\n";
     }
 
 }

@@ -265,9 +265,6 @@ public class BotBusiness implements Tags {
 
         String res = cp.getGoals(contact.uid);
 
-        System.out.println("^^^^^^^^^^^^^^^^^^^^^^^");
-        System.out.println(res);
-
         if (res.equals(""))
             return this.genErrorMessage("getGoals");
 
