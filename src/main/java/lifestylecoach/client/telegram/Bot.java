@@ -19,8 +19,8 @@ public class Bot extends TelegramLongPollingBot implements Tags {
     private static final String BOT_TOKEN = "260045306:AAFktJp6e6tubZTqMafPSu4icxi880gNynM";
 
     // Services URI
-    private static final String URI_PROCESS_CENTRIC = "http://localhost:5700/lifestylecoach-process-centric";
-
+    //private static final String URI_PROCESS_CENTRIC = "http://localhost:5700/lifestylecoach-process-centric";
+    private static final String URI_PROCESS_CENTRIC = "https://introsde-lifecoach-p-centric.herokuapp.com";
 
     public void onUpdateReceived(Update update) {
 
