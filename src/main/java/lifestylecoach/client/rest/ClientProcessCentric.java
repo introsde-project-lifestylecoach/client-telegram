@@ -128,7 +128,7 @@ public class ClientProcessCentric extends RestClient {
                 res = true;
             }
         } catch (javax.ws.rs.ProcessingException e) {
-            System.err.println("Error : Connection refused");
+            System.err.println("Error : Connection refused in \'" + path + "\'");
         }
 
         return res;
@@ -153,7 +153,7 @@ public class ClientProcessCentric extends RestClient {
                 res = response.readEntity(String.class);
             }
         } catch (javax.ws.rs.ProcessingException e) {
-            System.err.println("Error : Connection refused");
+            System.err.println("Error : Connection refused in \'" + path + "\'");
         }
 
         return res;
