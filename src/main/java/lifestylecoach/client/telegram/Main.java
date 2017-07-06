@@ -18,8 +18,6 @@ public class Main {
         // Instantiate Telegram Bots API
         TelegramBotsApi botsApi = new TelegramBotsApi();
 
-        //botsApi = new TelegramBotsApi("https://127.0.0.1:" + (System.getenv("PORT") != null ? System.getenv("PORT") : "5000"));
-
         // Register the bot
         try {
             botsApi.registerBot(new Bot());
