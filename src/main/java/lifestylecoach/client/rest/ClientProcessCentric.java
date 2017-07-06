@@ -23,8 +23,11 @@ public class ClientProcessCentric extends RestClient {
     public static final String DELETE_GOAL = "goal/delete";
     public static final String BMI = "user/bmi";
 
+    private String serviceURI = "";
+
     public ClientProcessCentric(String serviceURI) {
         super(serviceURI);
+        this.serviceURI = serviceURI;
     }
 
     /*public String getMeasures() {
@@ -122,7 +125,7 @@ public class ClientProcessCentric extends RestClient {
 
             status = response.getStatus();
 
-            System.out.println(":: POST -> status \"" + path + "\" : " + status);
+            System.out.println(":: POST -> status \"" + this.serviceURI + path + "\" : " + status);
 
             if (status == 202 || status == 200 || status == 201) {
                 res = true;
@@ -147,7 +150,7 @@ public class ClientProcessCentric extends RestClient {
 
             status = response.getStatus();
 
-            System.out.println(":: GET -> status \"" + path + "\" : " + status);
+            System.out.println(":: GET -> status \"" + this.serviceURI + path + "\" : " + status);
 
             if (status == 200) {
                 res = response.readEntity(String.class);
