@@ -326,7 +326,14 @@ public class BotBusiness implements Tags {
 
     public String genInfoMessage() {
 
-        return new String("Bot commands : \\start\n\\measures\n\\seeprofile\n\\adaptor"); //TODO
+        return new String("Bot commands : \n\n" +
+                "/start : starts a new session of the bot\n\n" +
+                "/seeprofile : User can see his actual profile\n\n" +
+                "/measures : show the measures history of the user, and allows him to modify the mesaures \n\n" +
+                "/goals : show the user goals and allows the user to modify and delete them\n\n" +
+                "/bmi : User can see advanced statistics based on his BMI\n\n" +
+                "/info : shows this message"
+        );
     }
 
     public String genErrorMessage(String where) {
