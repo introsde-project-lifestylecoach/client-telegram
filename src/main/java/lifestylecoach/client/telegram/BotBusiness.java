@@ -43,66 +43,6 @@ public class BotBusiness implements Tags {
         return new String("Back to main menù");
     }
 
-    /* OLD METHODS
-    // Save the name and the surname of the user into the db
-    public String registrationSurname(User contact, String command) {
-
-        ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
-
-        // parse command usually in this form : "/command surname"
-        String surname = command.split(" ")[1];
-
-        // generating JSON
-        Gson gson = new Gson();
-        String userJson = gson.toJson(new User(contact.uid, contact.name, surname));
-
-        // is all good? if not report the error
-        if (!cp.newNameSurname(userJson))
-            return this.genErrorMessage("registrationSurname");
-
-        return this.genRegHeight(contact);
-    }
-
-    public String registrationHeight(User contact, String command) {
-
-        ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
-
-        // parse command usually in this form : "/command surname"
-        String height = command.split(" ")[1];
-
-        // generating JSON
-        Gson gson = new Gson();
-        String heightjson = gson.toJson(new Measure(contact.uid, "height", height, ""));
-
-        // is all good? if not report the error
-        if (!cp.newHeight(heightjson))
-            return this.genErrorMessage("registrationHeight");
-
-        return this.genRegWeight(contact);
-    }
-
-    public String registrationWeight(User contact, String command) {
-
-        ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
-
-        // parse command usually in this form : "/command surname"
-        String weight = command.split(" ")[1];
-
-        // Replace , with . for avoid errors
-        weight = weight.replace(",", ".");
-
-        // generating JSON
-        Gson gson = new Gson();
-        String weightjson = gson.toJson(new Measure(contact.uid, "weight", weight, ""));
-
-        // is all good? if not report the error
-        if (!cp.newWeight(weightjson))
-            return this.genErrorMessage("registrationWeight");
-
-        return this.genRegFinish(contact);
-    }
-    */
-
     public String seeProfile(User contact) {
 
         ClientProcessCentric cp = new ClientProcessCentric(this.serviceUri);
@@ -278,7 +218,6 @@ public class BotBusiness implements Tags {
 
     private String genMeasuresList(String json) {
 
-        // TODO
         Gson gson = new Gson();
 
         Measure[] measures;
