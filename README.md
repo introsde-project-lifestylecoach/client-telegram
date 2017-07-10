@@ -22,15 +22,15 @@ Return firstname, surname, height, birthday, last weight, last waist, last hip
 2. Insert new value 
 
 #### /Goal
-1. Show goals
-  a. New Goal
-    i. Title
-    ii. Description
-    iii. Type
-    iv. Condition
-    v. Value    
-  b. Update goal
-  c. Delete goal
+1. Show goals<br />
+  a. New Goal<br />
+    i. Title<br />
+    ii. Description<br />
+    iii. Type<br />
+    iv. Condition<br />
+    v. Value<br />    
+  b. Update goal<br />
+  c. Delete goal<br />
   
 #### /adaptor
 Calculate BMI
