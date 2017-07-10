@@ -3,26 +3,37 @@ A telegram bot client for lifestyle coach
 
 ## Procedures
 
-### primo avvio
-1. C'è token?
-2. nome (preso da telegram)
-3. cognome
-4. primo peso
-5. prima altezza
+### Registration
+1. User exist
+2. Firstname (taken from Telegram)
+3. Surname
+4. Sex (m or f)
+5. Birthdate
+6. Current height
+7. Current weight
+8. Current waist
+9. Current hip
 
 #### /seeprofile
-Torna name, surname, last height, last weight
+Return firstname, surname, height, birthday, last weight, last waist, last hip
 
 #### /measure
+1. Select type -> Show last 15 measures of that type
+2. Insert new value 
 
-1. select type -> show last 10 measures of that type
+#### /Goal
+1. Show goals
+  a. New Goal
+    i. Title
+    ii. Description
+    iii. Type
+    iv. Condition
+    v. Value    
+  b. Update goal
+  c. Delete goal
+  
+#### /adaptor
+Calculate BMI
 
-2. insert new value 
-
-#### /goal -> show goals (2)
-1. update goal
-2. select type
-3. maggiore o minore
-4. value
-
-#### /adaptor TODO
+### /info
+Show the commands of the bot
